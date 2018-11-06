@@ -1,4 +1,5 @@
 const fs = require('fs')
+const accounts = `./database/accounts.json`
 
 const scanFile = (filename) => {
   if (fs.existsSync(filename)) {
@@ -10,18 +11,19 @@ const scanFile = (filename) => {
 }
 
 
-const addUser = async (username, password) => {
-  var file = scanFile('accounts.json')
+const addUser = (username, password) => {
+  var file = scanFile(accounts)
   newAcc = {
     'username': username,
     'password': password
   }
   file.push(newAcc)
-  fs.writeFileSync('accounts.json', JSON.stringify(file))
+  fs.writeFileSync(accounts, JSON.stringify(file))
 }
 
-const validateUsername = async (username) => {
-  var file = scanFile('accounts.json')
+
+const validateUsername = (username) => {
+  var file = scanFile(accounts)
   var match = file.find((user) => {
     return user.username == username
   })
@@ -32,8 +34,9 @@ const validateUsername = async (username) => {
   }
 }
 
+
 const retrieveUser = (username) => {
-  var file = scanFile('accounts.json')
+  var file = scanFile(accounts)
   var match = file.find((user) => {
     return user.username == username
   })
