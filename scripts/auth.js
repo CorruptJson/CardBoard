@@ -4,7 +4,6 @@ const database = require('./database.js')
 const saltRounds = 12
 
 
-
 const signup = async (username, password) => {
   var hashedPass = await generateHash(password)
   if (await database.validateUsername(username)) {
@@ -18,12 +17,14 @@ const signup = async (username, password) => {
   }
 }
 
+
 const login = async (username, password) => {
   var auth = await validateUser(username, password)
   if (auth) {
     return username
   }
 }
+
 
 const validateNewPass = async (password) => {
   if (password.length < 8) {
@@ -43,6 +44,7 @@ const validateUser = async (username, password) => {
   }
 }
 
+
 const generateHash = async (password) => {
   const hashedPass = await new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -52,6 +54,7 @@ const generateHash = async (password) => {
   })
   return hashedPass
 }
+
 
 const validatePass = async (password_input, password) => {
   const passAuth = await new Promise((resolve, reject) => {
