@@ -1,6 +1,7 @@
 require('dotenv').config()
 const fs = require('fs')
 const accounts = `./database/accounts.json`
+
 const { Client } = require('pg');
 
 const client = new Client({
@@ -32,6 +33,7 @@ const scanFile = (filename) => {
   return file
 }
 
+
 /* Adds user to database */
 const addUser = (username, password) => {
   var file = scanFile(accounts)
@@ -42,6 +44,7 @@ const addUser = (username, password) => {
   file.push(newAcc)
   fs.writeFileSync(accounts, JSON.stringify(file))
 }
+
 
 /* Checks if username exists in the database.
 ** Return true if username is not in use, and return false if username is already used*/
@@ -56,6 +59,7 @@ const validateUsername = (username) => {
     return false
   }
 }
+
 
 /* Returns user object with matching username */
 const retrieveUser = (username) => {

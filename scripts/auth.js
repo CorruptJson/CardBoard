@@ -18,6 +18,7 @@ const signup = async (username, password) => {
   }
 }
 
+
 /* Checks login credentials. Returns username if valid. Throws error if invalid. */
 const login = async (username, password) => {
   var auth = await validateLogin(username, password)
@@ -52,6 +53,7 @@ const validatePass = async (password_input, password) => {
   })
   return passAuth
 }
+
 
 /* Uses bcrypt to return a salted hash */
 const generateHash = async (password) => {
