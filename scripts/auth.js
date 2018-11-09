@@ -18,10 +18,7 @@ const signup = async (username, password) => {
   }
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> d20fb8a40fe4dd644c191d895acc2cb394e4ea9c
 /* Checks login credentials. Returns username if valid. Throws error if invalid. */
 const login = async (username, password) => {
   var auth = await validateLogin(username, password)
@@ -57,10 +54,6 @@ const validatePass = async (password_input, password) => {
   return passAuth
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d20fb8a40fe4dd644c191d895acc2cb394e4ea9c
 /* Uses bcrypt to return a salted hash */
 const generateHash = async (password) => {
   const hashedPass = await new Promise((resolve, reject) => {
