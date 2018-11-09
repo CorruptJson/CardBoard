@@ -33,6 +33,10 @@ const scanFile = (filename) => {
   return file
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d20fb8a40fe4dd644c191d895acc2cb394e4ea9c
 /* Adds user to database */
 const addUser = (username, password) => {
   var file = scanFile(accounts)
@@ -44,6 +48,10 @@ const addUser = (username, password) => {
   fs.writeFileSync(accounts, JSON.stringify(file))
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d20fb8a40fe4dd644c191d895acc2cb394e4ea9c
 /* Checks if username exists in the database.
 ** Return true if username is not in use, and return false if username is already used*/
 const validateUsername = (username) => {
@@ -58,6 +66,10 @@ const validateUsername = (username) => {
   }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d20fb8a40fe4dd644c191d895acc2cb394e4ea9c
 /* Returns user object with matching username */
 const retrieveUser = (username) => {
   var file = scanFile(accounts)
