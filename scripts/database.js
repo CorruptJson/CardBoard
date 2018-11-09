@@ -1,6 +1,7 @@
 require('dotenv').config()
 const fs = require('fs')
 const accounts = `./database/accounts.json`
+
 const { Client } = require('pg');
 
 const client = new Client({
