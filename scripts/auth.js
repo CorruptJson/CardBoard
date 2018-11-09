@@ -19,6 +19,7 @@ const signup = async (username, password) => {
 }
 
 
+/* Checks login credentials. Returns username if valid. Throws error if invalid. */
 const login = async (username, password) => {
   var auth = await validateLogin(username, password)
   if (auth) {
@@ -29,7 +30,7 @@ const login = async (username, password) => {
 }
 
 
-/**  Checks username and password and returns boolean */
+/*  Checks username and password and returns boolean */
 const validateLogin = async (username, password) => {
   var cred = db.retrieveUser(username)
   var passValidation = await validatePass(password, cred.password)
@@ -42,7 +43,7 @@ const validateLogin = async (username, password) => {
 }
 
 
-/**  Returns checks password hash and returns boolean */
+/*  Returns checks password hash and returns boolean */
 const validatePass = async (password_input, password) => {
   const passAuth = await new Promise((resolve, reject) => {
     bcrypt.compare(password_input, password, (err, hash) => {
@@ -53,7 +54,8 @@ const validatePass = async (password_input, password) => {
   return passAuth
 }
 
-/** Uses bcrypt to return a salted hash */
+
+/* Uses bcrypt to return a salted hash */
 const generateHash = async (password) => {
   const hashedPass = await new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
