@@ -25,10 +25,18 @@ app.get('/', (request, response) => {
 })
 
 
-app.post('/login', (request, response) => {
-  response.send(request.body)
+app.post('/signup', (request, response) => {
+  auth.signup(request.body.username, request.body.password, request.body.passwordConfirm)
+    .then(res => response.send(res))
+    .catch(err => response.send(`Error: ${err}`))
 })
 
+
+app.post('/login', (request, response) => {
+  auth.login(request.body.username, request.body.password)
+    .then(res => response.send(res))
+    .catch(err => response.send(`Error: ${err}`))
+})
 
 
 app.listen(port, console.log(`Server is up on the port ${port}`))
