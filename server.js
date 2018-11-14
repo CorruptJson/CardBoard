@@ -12,6 +12,7 @@ var session = undefined
 app.use(bodyParser.urlencoded({
   extended: true
 }))
+
 app.use(bodyParser.json())
 
 
