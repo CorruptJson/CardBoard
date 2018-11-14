@@ -3,6 +3,7 @@ const auth = require('./scripts/auth.js')
 const hbs = require('hbs')
 const bodyParser = require('body-parser')
 
+const port = process.env.PORT || 8080
 const app = express()
 
 var session = undefined
@@ -29,4 +30,4 @@ app.post('/login', (request, response) => {
 
 
 
-app.listen(8080, console.log('Server is up on the port 8080'))
+app.listen(port, console.log(`Server is up on the port ${port}`))
