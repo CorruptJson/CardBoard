@@ -59,3 +59,14 @@ typings/
 
 # next.js build output
 .next
+
+#visual studio project add-on
+FromExistingCode1.njsproj
+FromExistingCode1.sln
+FromExistingCode1/
+bin/
+.vs/
+obj/
+
+
+
