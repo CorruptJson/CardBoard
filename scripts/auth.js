@@ -5,11 +5,13 @@ const saltRounds = 12
 
 
 
-const signup = async (username, password) => {
+const signup = async (username, password, passwordConfirm) => {
   const hashedPass = await generateHash(password)
-  const usernameValidation = db.validateUsername(username)
+  const usernameValidation = await db.validateUsername(username)
   if (!usernameValidation) {
     throw `${username} already in use`
+  } else if (password != passwordConfirm) {
+    throw `Passwords do not match`
   } else if (password.length < 8) {
     throw 'Password must be at least 8 characters'
   } else {
@@ -32,7 +34,7 @@ const login = async (username, password) => {
 
 /*  Checks username and password and returns boolean */
 const validateLogin = async (username, password) => {
-  var cred = db.retrieveUser(username)
+  var cred = await db.retrieveUser(username)
   var passValidation = await validatePass(password, cred.password)
 
   if ((passValidation) && (username == cred.username)) {
@@ -64,6 +66,8 @@ const generateHash = async (password) => {
   })
   return hashedPass
 }
+
+
 
 
 module.exports = {
