@@ -2,24 +2,40 @@
 
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="css/login.css"></link>
 </head>
 
 <body>
-    <h1>Login</h1>
-    <form action="/login" method="POST">
-        <input id="usernameLogin" type="text" name="username" placeholder="username">
-        <input id="passwordLogin" type="password" name="password" placeholder="password">
-        <input type="submit" value="OK">
-    </form>
-    <h1>Sign Up</h1>
-    <form action="/signup" method="POST">
-        <input id="usernameSignup" type="text" name="username" placeholder="username">
-        <input id="passwordSignup" type="password" name="password" placeholder="password">
-        <input id="passwordSignup" type="password" name="passwordConfirm" placeholder="confirm password">
-        <input type="submit" value="OK">
-    </form>
+    <div id="loginbox" class="box">
+        <img id="login_pic" src="red.jpg" />
+        <h1>Log In</h1>
+        <form action="/login" method="POST">
+            <p>Username</p>
+            <input id="usernameLogin" type="text" name="username" placeholder="username">
+            <p>Password</p>
+            <input id="passwordLogin" type="password" name="password" placeholder="password">          
+            <input type="submit" value="submit">
+            <br/>
+            <a href="javascript:sign_up();">Don't have an account?</a>
+        </form>
+    </div>
+
+    <div id="signupbox" class="box">
+        <img id="login_pic" src="red.jpg" />
+        <h1>Sign Up</h1>
+        <form action="/signup" method="POST">
+            <p>Username</p>
+            <input id="usernameSignup" type="text" name="username" placeholder="username">
+            <p>Password</p>
+            <input id="passwordSignup" type="password" name="password" placeholder="password">
+            <p>Confirm Password</p>
+            <input id="confirmPassword" type="password" name="passwordConfirm" placeholder="confirm password">
+            <input type="submit" value="submit">
+            <br />
+            <a href="javascript:log_in();">Log In</a>
+        </form>
+    </div>
 </body>
 
-<script>
-</script>
+<script src="javascript/log_in.js"></script>
 </html>

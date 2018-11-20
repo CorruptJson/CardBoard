@@ -37,7 +37,9 @@ app.post('/signup', (request, response) => {
 
 app.post('/login', (request, response) => {
   auth.login(request.body.username, request.body.password)
-    .then(res => response.send(res))
+    .then(res => response.render('index.hbs', {
+      user: res
+    }))
     .catch(err => response.send(`Error: ${err}`))
 })
 
