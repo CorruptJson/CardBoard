@@ -1,14 +1,16 @@
+/* Node Modules */
 const express = require('express')
-const auth = require('./scripts/auth.js')
 const hbs = require('hbs')
 const bodyParser = require('body-parser')
+const session = require('client-sessions')
 
+/* Project scripts */
+const auth = require('./scripts/auth.js')
+
+/* Constants */
 const port = process.env.PORT || 8080
 const app = express()
 
-var session = undefined
-
-hbs.registerPartials(__dirname + '/views/partials');
 
 app.use(bodyParser.urlencoded({
   extended: true
