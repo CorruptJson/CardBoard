@@ -42,7 +42,7 @@ const retrieveUser = async (username) => {
   if (match.rows.length != 0) {
     return match.rows[0]
   } else {
-    return { username: '', password: '' }
+    return { username: undefined, password: undefined }
   }
 }
 
