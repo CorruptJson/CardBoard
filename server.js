@@ -9,6 +9,7 @@ const session = require('client-sessions')
 const auth = require('./scripts/auth.js')
 const db = require('./scripts/database.js')
 
+
 /**** Constants ***/
 const port = process.env.PORT || 8080
 const sessionSecret = process.env.SESSION_SECRET
