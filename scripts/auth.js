@@ -35,19 +35,21 @@ const login = async (username, password) => {
 /*  Checks username and password and returns boolean */
 const validateLogin = async (username, password) => {
   var cred = await db.retrieveUser(username)
-  var passValidation = await validatePass(password, cred.password)
-
-  if ((passValidation) && (username == cred.username)) {
-    return true
-  } else {
-    return false
+  if (username == cred.username) {
+    var passValidation = await validatePass(password, cred.password)
+    if (passValidation) {
+      return true
+    }
   }
+
+  return false
 }
 
 
 /*  Returns checks password hash and returns boolean */
 const validatePass = async (password_input, password) => {
   const passAuth = await new Promise((resolve, reject) => {
+    console.log(password_input, password)
     bcrypt.compare(password_input, password, (err, hash) => {
       if (err) reject(err)
       resolve(hash)
@@ -66,7 +68,6 @@ const generateHash = async (password) => {
   })
   return hashedPass
 }
-
 
 
 
