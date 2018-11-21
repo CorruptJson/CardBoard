@@ -19,11 +19,16 @@ const sessionActiveDuration = 5 * 60 * 1000
 const app = express()
 
 
-hbs.registerPartials(__dirname + '/views/partials');
-
+/**** Functions ***/
+const requireLogin = (request, response, next) => {
+  if (!request.user) {
+    response.redirect('/login');
+  } else {
+    next();
+  }
+}
 
 /**** Middlewares ***/
-
 
 hbs.registerPartials(`${__dirname}/views/partials`)
 
@@ -33,15 +38,15 @@ app.use(session({
   secret: sessionSecret,
   duration: sessionDuration,
   activeDuration: sessionActiveDuration,
+  httpOnly: true,
+  secure: true,
 }))
-
 
 /* Bodyparser Middlewares */
 app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(bodyParser.json())
-
 
 /* Middleware to show public files */
 app.use(express.static(__dirname + '/public'))
@@ -62,13 +67,6 @@ app.use((request, response, next) => {
   }
 })
 
-const requireLogin = (request, response, next) => {
-  if (!request.user) {
-    response.redirect('/login');
-  } else {
-    next();
-  }
-}
 
 /**** HTTP Requests ***/
 app.get('/', requireLogin, (request, response) => {
@@ -81,13 +79,11 @@ app.get('/login', (request, response) => {
   response.render('login.hbs')
 })
 
-
 app.post('/signup', (request, response) => {
   auth.signup(request.body.username, request.body.password, request.body.passwordConfirm)
     .then(res => response.send(res))
     .catch(err => response.send(`Error: ${err}`))
 })
-
 
 app.post('/login', (request, response) => {
   auth.login(request.body.username, request.body.password)
@@ -101,6 +97,10 @@ app.post('/login', (request, response) => {
     .catch(err => response.send(`Error: ${err}`))
 })
 
+app.post('/logout', (request, response) => {
+  request.session.reset()
+  response.redirect('/')
+})
 
 
 /**** Start Server ***/

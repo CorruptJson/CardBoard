@@ -49,7 +49,6 @@ const validateLogin = async (username, password) => {
 /*  Returns checks password hash and returns boolean */
 const validatePass = async (password_input, password) => {
   const passAuth = await new Promise((resolve, reject) => {
-    console.log(password_input, password)
     bcrypt.compare(password_input, password, (err, hash) => {
       if (err) reject(err)
       resolve(hash)
