@@ -47,7 +47,6 @@ app.use(express.static(__dirname + '/public'))
 
 /* Middleware for exposing username to template */
 app.use((request, response, next) => {
-  console.log(request.session)
   if (request.session && request.session.user) { // Check if session exists
     db.retrieveUser(request.session.user).then(user => { // Check Database for user
       if (user.username) { // Username will be undefined if user doesn't exist.
@@ -63,7 +62,6 @@ app.use((request, response, next) => {
 })
 
 const requireLogin = (request, response, next) => {
-  console.log(request.user)
   if (!request.user) {
     response.redirect('/login');
   } else {
