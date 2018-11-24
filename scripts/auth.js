@@ -27,7 +27,7 @@ const login = async (username, password) => {
   if (auth) {
     return username
   } else {
-    throw 'Invalid login'
+    throw 'User name or password not match'
   }
 }
 
