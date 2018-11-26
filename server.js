@@ -91,7 +91,7 @@ app.post('/signup', (request, response) => {
       show: true,
       message: res
     }))
-    .catch(err => response.render('signup.hbs',{
+    .catch(err => response.render('signup.hbs', {
       show: true,
       message: err
     }))
