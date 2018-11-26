@@ -13,29 +13,16 @@
             <p>Username</p>
             <input id="usernameLogin" type="text" name="username" placeholder="username">
             <p>Password</p>
-            <input id="passwordLogin" type="password" name="password" placeholder="password">          
-            <input type="submit" value="submit">
-            <br/>
-            <a href="javascript:sign_up();">Don't have an account?</a>
-        </form>
-    </div>
-
-    <div id="signupbox" class="box">
-        <img id="login_pic" src="red.jpg" />
-        <h1>Sign Up</h1>
-        <form action="/signup" method="POST">
-            <p>Username</p>
-            <input id="usernameSignup" type="text" name="username" placeholder="username">
-            <p>Password</p>
-            <input id="passwordSignup" type="password" name="password" placeholder="password">
-            <p>Confirm Password</p>
-            <input id="confirmPassword" type="password" name="passwordConfirm" placeholder="confirm password">
+            <input id="passwordLogin" type="password" name="password" placeholder="password">
             <input type="submit" value="submit">
             <br />
-            <a href="javascript:log_in();">Log In</a>
+            <a href="/signup">Don't have an account?</a>
         </form>
+        {{#show}}
+        <div class="err_msg">{{message}}</div>
+        {{/show}}
     </div>
+
 </body>
 
-<script src="javascript/log_in.js"></script>
 </html>
