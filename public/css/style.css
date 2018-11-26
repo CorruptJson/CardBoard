@@ -1,6 +1,7 @@
 ﻿body {
 }
 
+/*------------------Header-------------------*/
 header {
     position: relative;
     width: 100%;
@@ -37,9 +38,80 @@ header {
 }
 
 #user {
-    margin: 10px;
+    margin: auto;
     font-size: 20px;
+    text-align: right;
     position: absolute;
-    bottom: 3px;
-    right: 10px;
+    top: 20px;
+    right: 25px;
+    height: 20px;
+    width: 100px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 100px;
+    padding: 0px 50px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.mybutton {
+    display: block;
+    border: 0px none rgb(240,240,240);
+    -webkit-appearance: none;
+    -webkit-border-radius: 6px;
+    background-color: white;
+    text-align: right;
+ }
+
+ /*------------------Categories------------------*/
+categories {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 85%;
+    z-index: 6;
+}
+
+#first-col{
+    position: absolute;
+    background-color: rgb(200,200,200);
+    border-radius: 6px;
+    height: 100%;
+    width: 3px;
+    left: 0px;
+}
+
+.create_cat {
+    position: absolute;
+    display: block;
+    border: 3px solid rgb(200,200,200);
+    left: 0.5%;
+    width: 19.3%;
+    height: 160px;
+    -webkit-appearance: none;
+    -webkit-border-radius: 6px;
+    background-color: white;
+    text-align: center;
+    font-size: 8.5em;
+    color: rgb(200,200,200);
+}
+
+.column {
+    position: absolute;
+    background-color: rgb(200,200,200);
+    border-radius: 6px;
+    height: 100%;
+    width: 3px;
+    left: 20%;
 }
