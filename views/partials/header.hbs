@@ -4,7 +4,15 @@
         <div id="title">CardBoard</div>
 
     </a>
-    <div id="user">{{user}} </div>
+    <div class="dropdown" id="user">
+    	<span>{{user}}</span>
+    	<div class="dropdown-content">
+    		<form action="/logout" method="post">
+    			<button type="submit" class="mybutton">Logout</button>
+    		</form>
+    	</div>
+    </div>
+    
 </header>
 
 
