@@ -3,11 +3,13 @@ const express = require('express')
 const hbs = require('hbs')
 const bodyParser = require('body-parser')
 const session = require('client-sessions')
+const flash = require('express-flash-notification');
 
 
 /****  Project scripts ***/
 const auth = require('./scripts/auth.js')
 const db = require('./scripts/database.js')
+
 
 /**** Constants ***/
 const port = process.env.PORT || 8080
@@ -48,6 +50,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(bodyParser.json())
+app.use(flash(app));
 
 /* Middleware to show public files */
 app.use(express.static(__dirname + '/public'))
@@ -90,10 +93,7 @@ app.post('/signup', (request, response) => {
       show: true,
       message: res
     }))
-    .catch(err => response.render('signup.hbs',{
-      show: true,
-      message: err
-    }))
+    .catch(err => request.flash('info', err))
 })
 
 app.post('/login', (request, response) => {
@@ -105,10 +105,7 @@ app.post('/login', (request, response) => {
         user: response.locals.user
       })
     })
-    .catch(err => response.render('login.hbs', {
-      show: true,
-      message: err
-    }))
+    .catch(err => request.flash('info', err))
 })
 
 app.post('/logout', (request, response) => {
