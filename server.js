@@ -23,14 +23,65 @@ const app = express()
 /**** Functions ***/
 const requireLogin = (request, response, next) => {
   if (!request.user) {
-    response.redirect('/login');
+    response.redirect('/login')
   } else {
-    next();
+    next()
   }
 }
 
+const renderBoard = (request, response) => {
+  createBoardDivs(request.session.user)
+    .then(categoryDivs => {
+      response.render('index.hbs', {
+        user: response.locals.user,
+        categories: categoryDivs
+      })
+    })
+}
+
+
+const createBoardDivs = async (username) => {
+  let categoryDivs = []
+  let categories = await db.retrieve_categories(username)
+  categories = categories.rows
+  let cards = await db.retrieve_cards(username)
+  cards = cards.rows
+  for (i in categories) {
+    categoryDivs.push({
+      category_id: categories[i].category_id,
+      category_title: categories[i].category_title,
+      category_index: categories[i].category_index,
+      card_list: cards.filter(obj => obj.category_id == categories[i].category_id)
+    })
+  }
+  console.log(categoryDivs)
+  return categoryDivs
+}
+/*
+const createBoardDivs = async (rows) => {
+  let categoryDivs = ''
+  for (i in rows) {
+    categoryDivs += `<div class="categories"
+                    data-id=${rows[i].category_id}
+                    data-categoryTitle=${rows[i].category_title}
+                    data-categoryIndex=${rows[i].category_index}>
+                    <div class="cat_title">${rows[i].category_title}</div>`
+
+    const cardsObj = await db.retrieve_cards(rows[i].category_id)
+    const cards = cardsObj.rows
+    for (i in cards) {
+      categoryDivs += `<div data-id=${cards[i].card_id}></div>`
+    }
+
+    categoryDivs += `</div>`
+  }
+  console.log(categoryDivs)
+  return categoryDivs
+}
+ */
+
 /**** Middlewares ***/
-app.set('view engine', 'hbs');
+app.set('view engine', 'hbs')
 
 hbs.registerPartials(`${__dirname}/views/partials`)
 
@@ -72,9 +123,7 @@ app.use((request, response, next) => {
 
 /**** HTTP Requests ***/
 app.get('/', requireLogin, (request, response) => {
-  response.render('index.hbs', {
-    user: response.locals.user
-  })
+  renderBoard(request, response)
 })
 
 app.get('/login', (request, response) => {
@@ -102,9 +151,7 @@ app.post('/login', (request, response) => {
     .then(res => {
       request.session.user = res
       response.locals.user = res
-      response.render('index.hbs', {
-        user: response.locals.user
-      })
+      renderBoard(request, response)
     })
     .catch(err => response.render('login.hbs', {
       show: true,
@@ -119,4 +166,4 @@ app.post('/logout', (request, response) => {
 
 
 /**** Start Server ***/
-app.listen(port, console.log(`Server is up on the port ${port}`))
+app.listen(port, console.log(`Server is up on the port ${port}, with PID: ${process.pid}`))

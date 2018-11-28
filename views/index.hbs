@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 
-<html>
-<head>    
-    <link rel="stylesheet" href="css/style.css"></link>
+<html style="background-color:rgb(7, 192, 7)">
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    </link>
 </head>
 
 <body>
     {{>header}}
-    <categories>
-    	
-        {{>add_button}}
-	</categories>
-    
-    
-</body>
-    
+    <form method="POST" id="cat_container">
+        {{#each categories}}
+        <div class="categories" data-id={{this.category_id}} data-title={{this.category_title}} data-index={{this.category_index}}>
+            <div class="cat_title">{{this.category_title}}</div>
+            {{#each this.card_list}}
+            <div class="cards">{{this.card_id}}</div>
+            {{/each}}
+        </div>
+        {{/each}}
+        <input class="create_cat" type="button" value="+" />
+    </form>
 
-    
+
+</body>
+
+
+
 
 </html>
