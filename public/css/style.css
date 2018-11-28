@@ -29,16 +29,6 @@ header {
     top: -15px;
 }
 
-#create_cat {
-    position: absolute;
-    right: 10px;
-    margin: 5px;
-    color: white;
-    background: black;
-    border: none;
-    border-radius: 10px;
-}
-
 #user {
     margin: auto;
     font-size: 20px;
@@ -96,16 +86,51 @@ header {
     height: 100%;
 }
 
-.create_cat {
+#create_cat_border {
     height: 206px;
     width: 226px;
     display: inline-block;
     border: 2px solid rgb(200, 200, 200);
     margin: 5px;
     background-color: white;
+    color: rgb(200, 200, 200);
+    border-radius: 3px;
+}
+
+#create_cat_add {
+    height: 90%;
+    width: 95%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    display: block;
+    border: 0px solid rgb(200, 200, 200);
+    margin: 5px;
+    background-color: white;
     vertical-align: middle;
     font-size: 180px;
     color: rgb(200, 200, 200);
+}
+
+#create_cat_text {
+    display: none;
+    left: 10px;
+    width: 210px;
+    margin: 5px;
+    color: rgb(55, 55, 55);
+    background: white;
+    border: 2px solid rgb(200, 200, 200);
+    border-radius: 3px;
+}
+
+#create_cat_submit {
+    display: none;
+    left: 10px;
+    margin: 5px;
+    color: rgb(55, 55, 55);
+    background: white;
+    border: 2px solid rgb(200, 200, 200);
     border-radius: 3px;
 }
 

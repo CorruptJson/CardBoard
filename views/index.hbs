@@ -17,20 +17,24 @@
             <label>
                 <input type="checkbox"  />
                 <div class="cards" class="card" data-id={{this.card_id}}>
-                    <div class="front">Front<!--{{this.card_title}}--></div>
-                    <div class="back">Back<!--{{this.card_description}}--></div>
+                    <div class="front">Front<!--{{this.card_front}}--></div>
+                    <div class="back">Back<!--{{this.card_back}}--></div>
                 </div>
             </label>
             {{/each}}
+            <!--<input type="text" id="front_submit" placeholder="Input front of the card...">
+            <input type="text" id="back_submit" placeholder="Input back of the card...">-->
         </div>
         {{/each}}
-        <input class="create_cat" type="button" value="+" />
+        <div id=create_cat_border>
+            <input  type="button"   id="create_cat_add"     onclick="createCat()" value="+" />
+            <input  type="text"     id="create_cat_text"    placeholder="New category name">
+            <button type="submit"   id="create_cat_submit">Create Category</button>
+        </div>
     </form>
-
 
 </body>
 
-
-
+<script type="text/javascript" src="js/new_card_inputs.js"></script>
 
 </html>
