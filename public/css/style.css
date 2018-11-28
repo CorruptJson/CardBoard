@@ -29,15 +29,6 @@ header {
     top: -15px;
 }
 
-#create_cat {
-    position: absolute;
-    right: 10px;
-    margin: 5px;
-    color: white;
-    background: black;
-    border: none;
-    border-radius: 10px;
-}
 
 #user {
     margin: auto;
@@ -87,7 +78,7 @@ header {
     border-radius: 6px 6px 0px 0px;
     margin: 5px;
     min-height: 200px;
-    vertical-align: middle;
+    vertical-align: top;
     padding: 0px;
 }
 
@@ -96,14 +87,14 @@ header {
     height: 100%;
 }
 
-.create_cat {
+#createCat {
     height: 206px;
     width: 226px;
     display: inline-block;
     border: 2px solid rgb(200, 200, 200);
     margin: 5px;
     background-color: white;
-    vertical-align: middle;
+    vertical-align: top;
     font-size: 180px;
     color: rgb(200, 200, 200);
     border-radius: 3px;

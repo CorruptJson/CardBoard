@@ -9,7 +9,7 @@
 
 <body>
     {{>header}}
-    <form method="POST" id="cat_container">
+    <div id="cat_container">
         {{#each categories}}
         <div class="categories" data-id={{this.category_id}} data-title={{this.category_title}} data-index={{this.category_index}}>
             <div class="cat_title">{{this.category_title}}</div>
@@ -18,13 +18,29 @@
             {{/each}}
         </div>
         {{/each}}
-        <input class="create_cat" type="button" value="+" />
-    </form>
+        <input id="createCat" type="button" value="+" />
+
+    </div>
+
 
 
 </body>
 
-
-
+<script>
+    document.getElementById("createCat").addEventListener("click", () => {
+        fetch(`http://localhost:${location.port}/createCategory/`, {
+            method: 'post',
+        }).then(res => {
+            let newDiv = document.createElement("div")
+            newDiv.className = `categories`
+            newDiv.dataset.id = res.id
+            newDiv.dataset.title = `New Category`
+            newDiv.dataset.index = res.index
+            newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}</div>`
+            document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
+            console.log(res)
+        })
+    })
+</script>
 
 </html>

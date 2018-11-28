@@ -85,7 +85,7 @@ app.set('view engine', 'hbs')
 
 hbs.registerPartials(`${__dirname}/views/partials`)
 
-/** Session Middleware */
+/* Session Middleware */
 app.use(session({
   cookieName: 'session',
   secret: sessionSecret,
@@ -122,6 +122,9 @@ app.use((request, response, next) => {
 
 
 /**** HTTP Requests ***/
+
+/*** GET ***/
+
 app.get('/', requireLogin, (request, response) => {
   renderBoard(request, response)
 })
@@ -133,6 +136,9 @@ app.get('/login', (request, response) => {
 app.get('/signup', (request, response) => {
   response.render('signup.hbs')
 })
+
+
+/*** POST ***/
 
 app.post('/signup', (request, response) => {
   auth.signup(request.body.username, request.body.password, request.body.passwordConfirm)
@@ -162,6 +168,18 @@ app.post('/login', (request, response) => {
 app.post('/logout', (request, response) => {
   request.session.reset()
   response.redirect('/')
+})
+
+app.post('/createCategory', requireLogin, (request, response) => {
+  const username = request.session.user
+  db.create_category(username, "New Category")
+    .then(res => {
+      console.log(res.rows)
+      response.send({
+        id: res.rows[0].category_id,
+        index: res.rows[0].category_index
+      })
+    })
 })
 
 

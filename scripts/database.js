@@ -53,10 +53,10 @@ const create_category = async (username, title) => {
   if (categories.rows.length) {
     const num = categories.rows.slice(-1)[0].category_index + 1
     console.log(num)
-    return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3)`, [username, title, num])
+    return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3) RETURNING *`, [username, title, num])
   }
   const num = 0
-  return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3)`, [username, title, num])
+  return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3) RETURNING *`, [username, title, num])
 }
 
 /* Returns categories with matching user */
@@ -71,7 +71,7 @@ const retrieve_cards = async (username) => {
 
 
 
-run_query(`Select * from users; Select * from category`).then(res => console.log(res[1].rows))
+//create_category(`jason`, `new_test`).then(res => console.log(res.rows[0].category_id))
 
 module.exports = {
   addUser,
