@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html style="background-color:rgb(7, 192, 7)">
+<html>
 
 <head>
     <link rel="stylesheet" href="css/style.css">
@@ -14,7 +14,13 @@
         <div class="categories" data-id={{this.category_id}} data-title={{this.category_title}} data-index={{this.category_index}}>
             <div class="cat_title">{{this.category_title}}</div>
             {{#each this.card_list}}
-            <div class="cards">{{this.card_id}}</div>
+            <label>
+                <input type="checkbox"  />
+                <div class="cards" class="card" data-id={{this.card_id}}>
+                    <div class="front">Front<!--{{this.card_title}}--></div>
+                    <div class="back">Back<!--{{this.card_description}}--></div>
+                </div>
+            </label>
             {{/each}}
         </div>
         {{/each}}
