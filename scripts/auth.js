@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt')
 const db = require('./database.js')
 
 const saltRounds = 12
@@ -7,16 +7,22 @@ const saltRounds = 12
 
 const signup = async (username, password, passwordConfirm) => {
   const hashedPass = await generateHash(password)
-  const usernameValidation = await db.validateUsername(username)
-  if (!usernameValidation) {
-    throw `${username} already in use`
-  } else if (password != passwordConfirm) {
-    throw `Passwords do not match`
-  } else if (password.length < 8) {
-    throw 'Password must be at least 8 characters'
+
+  if (username.length < 3 || username.length > 32) {
+    throw `username must be between 3-32 characters`
   } else {
-    db.addUser(username, hashedPass)
-    return `${username}'s account added!`
+    const usernameValidation = await db.validateUsername(username)
+
+    if (!usernameValidation) {
+      throw `${username} already in use`
+    } else if (password != passwordConfirm) {
+      throw `Passwords do not match`
+    } else if (password.length < 8) {
+      throw 'Password must be at least 8 characters'
+    } else {
+      db.addUser(username, hashedPass)
+      return `${username}'s account added!`
+    }
   }
 }
 

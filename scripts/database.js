@@ -2,7 +2,7 @@ require('dotenv').config()
 const fs = require('fs')
 const accounts = `./database/accounts.json`
 
-const { Client } = require('pg');
+const { Client } = require('pg')
 
 
 /* Function to run query */
@@ -12,7 +12,7 @@ const run_query = async (query, param) => {
     ssl: true,
   })
   await client.connect()
-  res = await client.query(query, param)
+  const res = await client.query(query, param)
   await client.end()
   return res
 }
@@ -27,7 +27,7 @@ const addUser = async (username, password) => {
 /* Checks if username exists in the database.
 ** Return true if username is not in use, and return false if username is already used*/
 const validateUsername = async (username) => {
-  match = await run_query('SELECT username FROM users WHERE username = $1', [username])
+  const match = await run_query('SELECT username FROM users WHERE username = $1', [username])
   if (match.rows.length === 0) {
     return true
   } else {
@@ -38,7 +38,7 @@ const validateUsername = async (username) => {
 
 /* Returns user object with matching username */
 const retrieveUser = async (username) => {
-  match = await run_query('SELECT * FROM users WHERE username = $1', [username])
+  const match = await run_query('SELECT * FROM users WHERE username = $1', [username])
   if (match.rows.length != 0) {
     return match.rows[0]
   } else {
@@ -46,10 +46,40 @@ const retrieveUser = async (username) => {
   }
 }
 
+/* Creates category */
+const create_category = async (username, title) => {
+  const categories = await retrieve_categories(username)
+  console.log(categories.rows.length)
+  if (categories.rows.length) {
+    const num = categories.rows.slice(-1)[0].category_index + 1
+    console.log(num)
+    return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3)`, [username, title, num])
+  }
+  const num = 0
+  return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3)`, [username, title, num])
+}
+
+/* Returns categories with matching user */
+const retrieve_categories = async (username) => {
+  return await run_query('SELECT * from category WHERE username = $1 ORDER BY category_index', [username])
+}
+
+/* Returns cards with matching user */
+const retrieve_cards = async (username) => {
+  return await run_query(`SELECT * from card WHERE category_id in (SELECT category_id FROM category WHERE username = $1)`, [username])
+}
+
+
+
+run_query(`Select * from users; Select * from category`).then(res => console.log(res[1].rows))
 
 module.exports = {
   addUser,
   validateUsername,
-  retrieveUser
+  retrieveUser,
+  run_query,
+  retrieve_categories,
+  retrieve_cards,
+  create_category
 }
 
