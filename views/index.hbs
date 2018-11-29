@@ -11,7 +11,7 @@
     {{>header}}
     <div id="cat_container">
         {{#each categories}}
-        <div class="categories" data-id={{this.category_id}} data-title={{this.category_title}} data-index={{this.category_index}}>
+        <div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
             <div class="cat_title">{{this.category_title}}</div>
             {{#each this.card_list}}
             <div class="cards">{{this.card_id}}</div>
@@ -27,19 +27,29 @@
 </body>
 
 <script>
+    if (window.location.hostname == 'localhost') {
+        var url = `http://${window.location.hostname}:${location.port}/createCategory/`
+    } else {
+        var url = `https://${window.location.hostname}:${location.port}/createCategory/`
+    }
+
+    console.log(url)
     document.getElementById("createCat").addEventListener("click", () => {
-        fetch(`http://localhost:${location.port}/createCategory/`, {
+        fetch(url, {
             method: 'post',
-        }).then(res => {
-            let newDiv = document.createElement("div")
-            newDiv.className = `categories`
-            newDiv.dataset.id = res.id
-            newDiv.dataset.title = `New Category`
-            newDiv.dataset.index = res.index
-            newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}</div>`
-            document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
-            console.log(res)
+            mode: 'no-cors'
         })
+            .then(res => { return res.json() })
+            .then(res => {
+                let newDiv = document.createElement("div")
+                newDiv.className = `categories`
+                newDiv.dataset.id = res.id
+                newDiv.dataset.title = `New Category`
+                newDiv.dataset.index = res.index
+                newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}</div>`
+                document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
+                console.log(res)
+            })
     })
 </script>
 

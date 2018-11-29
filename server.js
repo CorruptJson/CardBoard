@@ -174,7 +174,7 @@ app.post('/createCategory', requireLogin, (request, response) => {
   const username = request.session.user
   db.create_category(username, "New Category")
     .then(res => {
-      console.log(res.rows)
+      console.log(res.rows[0])
       response.send({
         id: res.rows[0].category_id,
         index: res.rows[0].category_index
