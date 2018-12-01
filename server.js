@@ -57,28 +57,7 @@ const createBoardDivs = async (username) => {
   console.log(categoryDivs)
   return categoryDivs
 }
-/*
-const createBoardDivs = async (rows) => {
-  let categoryDivs = ''
-  for (i in rows) {
-    categoryDivs += `<div class="categories"
-                    data-id=${rows[i].category_id}
-                    data-categoryTitle=${rows[i].category_title}
-                    data-categoryIndex=${rows[i].category_index}>
-                    <div class="cat_title">${rows[i].category_title}</div>`
 
-    const cardsObj = await db.retrieve_cards(rows[i].category_id)
-    const cards = cardsObj.rows
-    for (i in cards) {
-      categoryDivs += `<div data-id=${cards[i].card_id}></div>`
-    }
-
-    categoryDivs += `</div>`
-  }
-  console.log(categoryDivs)
-  return categoryDivs
-}
- */
 
 /**** Middlewares ***/
 app.set('view engine', 'hbs')
@@ -133,22 +112,19 @@ app.get('/login', (request, response) => {
   response.render('login.hbs')
 })
 
-app.get('/signup', (request, response) => {
-  response.render('signup.hbs')
-})
-
-
 /*** POST ***/
 
 app.post('/signup', (request, response) => {
   auth.signup(request.body.username, request.body.password, request.body.passwordConfirm)
-    .then(res => response.render('signup.hbs', {
+    .then(res => {
+      request.session.user = request.body.username
+      response.locals.user = request.body.username
+      renderBoard(request, response)
+    })
+    .catch(err => response.render('login.hbs', {
       show: true,
-      message: res
-    }))
-    .catch(err => response.render('signup.hbs', {
-      show: true,
-      message: err
+      message: err,
+      signup: true
     }))
 })
 
