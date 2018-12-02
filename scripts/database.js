@@ -69,8 +69,19 @@ const retrieve_cards = async (username) => {
   return await run_query(`SELECT * from card WHERE category_id in (SELECT category_id FROM category WHERE username = $1)`, [username])
 }
 
+const delete_cards = async (username, id) => {
+  const res = await run_query(`DELETE from category WHERE username = $1 and category_id = $2 RETURNING category_index`, [username, id])
+  if (res.rows[0]) {
+    console.log(res.rows[0].category_index)
+    return await run_query(`UPDATE category SET category_index = category_index - 1 WHERE category_index > $1`, [res.rows[0].category_index])
+  } else {
+    throw `No category with matching ID and username!`
+  }
+}
+//delete_cards('jason', 116)
 
 
+run_query(`SELECT * from category`).then(res => console.log(res.rows))
 //create_category(`jason`, `new_test`).then(res => console.log(res.rows[0].category_id))
 
 module.exports = {
