@@ -116,7 +116,7 @@ app.get('/login', (request, response) => {
 
 app.post('/signup', (request, response) => {
   auth.signup(request.body.username, request.body.password, request.body.passwordConfirm)
-    .then(res => {
+    .then(res => {/*  */
       request.session.user = request.body.username
       response.locals.user = request.body.username
       renderBoard(request, response)

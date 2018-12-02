@@ -48,15 +48,18 @@ const retrieveUser = async (username) => {
 
 /* Creates category */
 const create_category = async (username, title) => {
-  const categories = await retrieve_categories(username)
-  console.log(categories.rows.length)
-  if (categories.rows.length) {
-    const num = categories.rows.slice(-1)[0].category_index + 1
-    console.log(num)
-    return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3) RETURNING *`, [username, title, num])
-  }
-  const num = 0
-  return await run_query(`INSERT INTO category (username, category_title, category_index) VALUES ($1, $2, $3) RETURNING *`, [username, title, num])
+  const query = `
+  INSERT INTO category (username, category_title, category_index)
+    VALUES ($1, $2, (
+      SELECT CASE
+        WHEN MAX(category_index) ISNULL then 0
+        ELSE MAX(category_index) + 1
+      END
+      FROM category
+      WHERE username = $3
+    ))
+  RETURNING *`
+  return await run_query(query, [username, title, username])
 }
 
 /* Returns categories with matching user */
@@ -69,7 +72,7 @@ const retrieve_cards = async (username) => {
   return await run_query(`SELECT * from card WHERE category_id in (SELECT category_id FROM category WHERE username = $1)`, [username])
 }
 
-const delete_cards = async (username, id) => {
+const delete_category = async (username, id) => {
   const res = await run_query(`DELETE from category WHERE username = $1 and category_id = $2 RETURNING category_index`, [username, id])
   if (res.rows[0]) {
     console.log(res.rows[0].category_index)
@@ -79,9 +82,14 @@ const delete_cards = async (username, id) => {
   }
 }
 //delete_cards('jason', 116)
+//run_query('delete from category where 1 = 1')
+/*
+create_category("jason", `h`)
+  .then(run_query(`SELECT * from category WHERE username = 'jason'`)
+    .then(res => console.log(res.rows)))
+*/
 
 
-run_query(`SELECT * from category`).then(res => console.log(res.rows))
 //create_category(`jason`, `new_test`).then(res => console.log(res.rows[0].category_id))
 
 module.exports = {
