@@ -3,18 +3,22 @@ const fs = require('fs')
 const accounts = `./database/accounts.json`
 
 const { Client } = require('pg')
+const { Pool } = require('pg')
 
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
+})
 
 /* Function to run query */
 const run_query = async (query, param) => {
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true,
-  })
-  await client.connect()
-  const res = await client.query(query, param)
-  await client.end()
-  return res
+  const client = await pool.connect()
+  try {
+    const res = await client.query(query, param)
+    return res
+  } finally {
+    client.release()
+  }
 }
 
 
@@ -49,16 +53,17 @@ const retrieveUser = async (username) => {
 /* Creates category */
 const create_category = async (username, title) => {
   const query = `
-  INSERT INTO category (username, category_title, category_index)
-    VALUES ($1, $2, (
-      SELECT CASE
-        WHEN MAX(category_index) ISNULL then 0
-        ELSE MAX(category_index) + 1
-      END
-      FROM category
-      WHERE username = $3
-    ))
-  RETURNING *`
+    INSERT INTO category (username, category_title, category_index)
+      VALUES ($1, $2, (
+        SELECT CASE
+          WHEN MAX(category_index) ISNULL then 0
+          ELSE MAX(category_index) + 1
+        END
+        FROM category
+        WHERE username = $3
+      ))
+    RETURNING *`
+
   return await run_query(query, [username, title, username])
 }
 
@@ -72,14 +77,33 @@ const retrieve_cards = async (username) => {
   return await run_query(`SELECT * from card WHERE category_id in (SELECT category_id FROM category WHERE username = $1)`, [username])
 }
 
+
+/**
+ * Deletes a category.
+ * Uses multiple queries in one transaction to prevent index from messing up
+ * @param {string} username
+ * @param {number} id
+ */
 const delete_category = async (username, id) => {
-  const res = await run_query(`DELETE from category WHERE username = $1 and category_id = $2 RETURNING category_index`, [username, id])
-  if (res.rows[0]) {
-    console.log(res.rows[0].category_index)
-    return await run_query(`UPDATE category SET category_index = category_index - 1 WHERE category_index > $1`, [res.rows[0].category_index])
-  } else {
-    throw `No category with matching ID and username!`
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+    const deleted = await client.query("DELETE from category WHERE username = $1 and category_id = $2 RETURNING category_index", [username, id])
+    console.log(deleted.rows[0])
+    if (deleted.rows[0]) {
+      await client.query(`UPDATE category SET category_index = category_index - 1 WHERE category_index > $1`, [deleted.rows[0].category_index])
+    } else {
+      throw `No category with matching ID and username!`
+    }
+    await client.query('COMMIT')
+  } catch (e) {
+    await client.query('ROLLBACK')
+    throw e
+  } finally {
+    client.release()
   }
+  return
+
 }
 //delete_cards('jason', 116)
 //run_query('delete from category where 1 = 1')
@@ -91,7 +115,7 @@ create_category("jason", `h`)
 
 
 //create_category(`jason`, `new_test`).then(res => console.log(res.rows[0].category_id))
-
+run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
 module.exports = {
   addUser,
   validateUsername,
@@ -99,6 +123,7 @@ module.exports = {
   run_query,
   retrieve_categories,
   retrieve_cards,
-  create_category
+  create_category,
+  delete_category
 }
 

@@ -158,6 +158,31 @@ app.post('/createCategory', requireLogin, (request, response) => {
     })
 })
 
+app.post('/deleteCategory', requireLogin, (request, response) => {
+  const username = request.session.user
+  const id = request.body.id
+  console.log(username, id)
+  db.delete_category(username, id)
+    .then(res => response.send(true))
+    .catch(res => {
+      console.log(res)
+      response.send(false)
+    })
+})
+/*
+app.post('/deleteCategory', requireLogin, (request, response) => {
+  const username = request.session.user
+  const id = request.body.id
+  console.log(username, id)
+  db.delete_category(username, id)
+    .then(response.send({
+      deleted: 'true'
+    }))
+    .catch(response.send({
+      deleted: 'false'
+    }))
+})
+*/
 
 /**** Start Server ***/
 app.listen(port, console.log(`Server is up on the port ${port}, with PID: ${process.pid}`))

@@ -12,13 +12,13 @@
     <div id="cat_container">
         {{#each categories}}
         <div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
-            <div class="cat_title">{{this.category_title}}</div>
+            <div class="cat_title">{{this.category_title}}<button onclick="deleteCat(this)">..</button></div>
             {{#each this.card_list}}
             <div class="cards">{{this.card_id}}</div>
             {{/each}}
         </div>
         {{/each}}
-        <input id="createCat" type="button" value="+" />
+        <input id="createCat" type="button" value="+" onclick="addCat()"/>
 
     </div>
 
