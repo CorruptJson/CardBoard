@@ -54,7 +54,6 @@ const createBoardDivs = async (username) => {
       card_list: cards.filter(obj => obj.category_id == categories[i].category_id)
     })
   }
-  console.log(categoryDivs)
   return categoryDivs
 }
 
@@ -169,20 +168,7 @@ app.post('/deleteCategory', requireLogin, (request, response) => {
       response.send(false)
     })
 })
-/*
-app.post('/deleteCategory', requireLogin, (request, response) => {
-  const username = request.session.user
-  const id = request.body.id
-  console.log(username, id)
-  db.delete_category(username, id)
-    .then(response.send({
-      deleted: 'true'
-    }))
-    .catch(response.send({
-      deleted: 'false'
-    }))
-})
-*/
+
 
 /**** Start Server ***/
 app.listen(port, console.log(`Server is up on the port ${port}, with PID: ${process.pid}`))

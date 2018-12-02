@@ -22,3 +22,4 @@ CREATE TABLE IF NOT EXISTS "card"
     "card_front" varchar(150),
     "card_back" varchar(300)
 )
+
