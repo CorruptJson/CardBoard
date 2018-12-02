@@ -19,8 +19,8 @@ const addCat = () => {
       newDiv.dataset.title = `New Category`
       newDiv.dataset.index = res.index
       newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}<button onclick="deleteCat(this)">..</button></div>`
+
       document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
-      console.log(res)
     })
 }
 
@@ -30,7 +30,6 @@ const deleteCat = (self => {
   const categories = document.getElementsByClassName("categories")
   const data = { id: id }
   for (let i = 0; i < categories.length; i++) {
-    console.log(categories[i])
     if (parseInt(categories[i].dataset.index) > index) {
       categories[i].dataset.index -= 1
     }
