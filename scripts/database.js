@@ -179,11 +179,34 @@ const delete_category = async (username, id) => {
 
 }
 
+/**
+ * Edits the text on a card.
+ * @param {string} username
+ * @param {number} id
+ * @param {string} text
+ * @param {"front", "back"} side
+ */
+const edit_card = async (username, id, text, side) => {
+  if (side == "front") {
+    var card = await run_query('UPDATE card SET card_front = $1 WHERE card_id = $2 AND category_id in (SELECT category_id FROM category WHERE username = $3) RETURNING *', [text, id, username])
+  } else if (side == "back") {
+    var card = await run_query('UPDATE card SET card_back = $1 WHERE card_id = $2 AND category_id in (SELECT category_id FROM category WHERE username = $3) RETURNING *', [text, id, username])
+  } else {
+    throw "Invalid side"
+  }
+  if (card.rows[0]) {
+    return card.rows[0]
+  } else {
+    throw "Error: Card cannot be modified (does not exist or card does not belong to user)"
+  }
 
+}
+
+edit_card('jason', 96, "world", "back").then(res => console.log(res))
 //create_card('jason', 427, 'hello', 'world')
 //create_category(`jason`, `new_test`).then(res => console.log(res.rows[0].category_id))
 //run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
-run_query(`SELECT * from card`).then(res => console.log(res.rows))
+//run_query(`SELECT * from card`).then(res => console.log(res.rows))
 module.exports = {
   addUser,
   validateUsername,

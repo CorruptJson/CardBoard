@@ -15,7 +15,13 @@ const addCat = () => {
   fetch(`${url}/createCategory`, {
     method: 'post',
   })
-    .then(res => { return res.json() })
+    .then(res => {
+      if (res.redirected) {
+        alert("Your session has expired. Please log back in.")
+        window.location.href = "/"
+      }
+      return res.json()
+    })
     .then(res => {
       if (res) {
         let newDiv = document.createElement("div")
@@ -41,7 +47,13 @@ const deleteCat = (self) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
-    .then(res => { return res.json() })
+    .then(res => {
+      if (res.redirected) {
+        alert("Your session has expired. Please log back in.")
+        window.location.href = "/"
+      }
+      return res.json()
+    })
     .then(res => {
       if (res) {
         const index = parseInt(self.parentNode.parentNode.dataset.index)
@@ -65,7 +77,13 @@ const createCard = (self) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
-    .then(res => { return res.json() })
+    .then(res => {
+      if (res.redirected) {
+        alert("Your session has expired. Please log back in.")
+        window.location.href = "/"
+      }
+      return res.json()
+    })
     .then(res => {
       console.log(res)
       if (res) {
@@ -140,8 +158,6 @@ const edit_card = (self) => {
     })
   }
   card.innerHTML = ''
-
-
 
   card.appendChild(area)
   card.appendChild(confirm)

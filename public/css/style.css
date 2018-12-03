@@ -199,13 +199,15 @@ label:not(.nohover):hover :checked+.card {
     white-space: pre-wrap;
     word-wrap: break-word;
     vertical-align: middle;
+    text-align: center;
 }
 
 .confirm-card {
-    margin:auto;
+    margin: auto;
     width: 80px;
 }
 
 p {
-    margin:14px;
+    margin: 14px;
+    text-align: left
 }

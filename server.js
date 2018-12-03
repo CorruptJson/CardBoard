@@ -192,6 +192,7 @@ app.post('/createCard', requireLogin, (request, response) => {
     })
 })
 
+app.post('/editCard', requireLogin, (request, response) => {})
 
 /**** Start Server ***/
 app.listen(port, console.log(`Server is up on the port ${port}, with PID: ${process.pid}`))
