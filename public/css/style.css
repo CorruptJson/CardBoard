@@ -1,9 +1,26 @@
 ﻿body {
     margin:0px;
+    
+}
+/*------------------grid---------------------*/
+.header{
+    grid-area:header
+}
+
+#cat_container {
+    grid-area: cat
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas: 
+        'header header header header header header' 
+        'cat cat cat cat cat cat' ;
+    grid-gap: 10px;    
+    padding: 10px;
 }
 
 /*------------------Header-------------------*/
-
 header {
     position: relative;
     width: 100%;

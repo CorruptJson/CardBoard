@@ -15,6 +15,7 @@
     left: 35%;
     position: absolute;
     background-image: url(../cardboard.jpg);
+    word-wrap: break-word;
 }
 
 #login_pic {
@@ -64,6 +65,7 @@ h1 {
     color: #fff;
     font-size: 18px;
     border-radius: 20px;
+    margin-bottom: 10px;
 }
 
 .box input[type="submit"]:hover {
@@ -91,10 +93,12 @@ h1 {
     font-size: 18px;
     line-height: 20px;
     color: #5b152b;
-    position: relative;
+    position: absolute;
     left: 10%;
-    margin: auto;
+    margin: auto;    
 }
+
+
 
 .switch {
     color: white;
