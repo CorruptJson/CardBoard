@@ -150,7 +150,6 @@ label {
     height: 100%;
     width: 100%;
     background: #FFF;
-    text-align: center;
     backface-visibility: hidden;
     border-radius: 2px;
 }
@@ -193,6 +192,7 @@ label:not(.nohover):hover :checked+.card {
     white-space: pre-wrap;
     word-wrap: break-word;
     vertical-align: middle;
+    text-align: center;
 }
 
 .back {
@@ -204,4 +204,8 @@ label:not(.nohover):hover :checked+.card {
 .confirm-card {
     margin:auto;
     width: 80px;
+}
+
+p {
+    margin:14px;
 }

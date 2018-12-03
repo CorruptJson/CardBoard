@@ -86,9 +86,9 @@ const createCard = (self) => {
         newDiv.dataset.index = res.index
 
         newFront.className = "front"
-        newFront.innerHTML = `<h3>${newDiv.dataset.front}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button>`
+        newFront.innerHTML = `<h3>${escape_HTML(newDiv.dataset.front)}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button>`
         newBack.className = "back"
-        newBack.innerHTML = `<p>${newDiv.dataset.back}</p><button class="card-edit" onclick="edit_card(this)">Edit</button>`
+        newBack.innerHTML = `<p>${escape_HTML(newDiv.dataset.back)}</p><button class="card-edit" onclick="edit_card(this)">Edit</button>`
 
         newLabel.appendChild(newCheckbox)
         newLabel.appendChild(newDiv)
@@ -124,7 +124,7 @@ const edit_card = (self) => {
       event.stopPropagation()
       event.preventDefault()
       card.parentNode.dataset.front = area.value
-      card.innerHTML = `<h3>${area.value}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button>`
+      card.innerHTML = `<h3>${escape_HTML(area.value)}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button>`
 
     })
   } else {
@@ -136,7 +136,7 @@ const edit_card = (self) => {
       event.stopPropagation()
       event.preventDefault()
       card.parentNode.dataset.back = area.value
-      card.innerHTML = `<p>${area.value}</p><button class="card-edit" onclick="edit_card(this)">Edit</button>`
+      card.innerHTML = `<p>${escape_HTML(area.value)}</p><button class="card-edit" onclick="edit_card(this)">Edit</button>`
     })
   }
   card.innerHTML = ''
@@ -146,6 +146,10 @@ const edit_card = (self) => {
   card.appendChild(area)
   card.appendChild(confirm)
 
+}
+
+const escape_HTML = (str) => {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 
