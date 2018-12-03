@@ -5,7 +5,7 @@ if (window.location.hostname == 'cardboard-project.herokuapp.com') {
 }
 
 console.log(url)
-
+//Edit button <button id="createCard" onclick="createCard(this)">+</button>
 
 const addCat = () => {
   fetch(`${url}/createCategory`, {
@@ -71,6 +71,8 @@ const createCard = (self) => {
         let newFront = document.createElement("div")
         let newBack = document.createElement("div")
 
+        newLabel.className = "flip"
+
         newCheckbox.type = "checkbox"
 
         newDiv.className = `card`
@@ -89,10 +91,64 @@ const createCard = (self) => {
 
         newDiv.appendChild(newFront)
         newDiv.appendChild(newBack)
-        self.parentNode.insertBefore(newLabel, self.parentNode.childNodes[self.parentNode.childNodes.length -2])
+        self.parentNode.insertBefore(newLabel, self.parentNode.childNodes[self.parentNode.childNodes.length - 2])
 
       } else {
         console.error('Error creating card')
       }
     })
 }
+
+const edit_card = (self) => {
+  event.stopPropagation()
+  event.preventDefault()
+  let card = self.parentNode
+  let area = document.createElement("textarea")
+  let confirm = document.createElement("button")
+  area.rows = 8
+  area.cols = 24
+  confirm.innerHTML = "✔"
+
+  if (card.className == "front") {
+    let text = card.parentNode.dataset.front
+    area.innerHTML = text
+    area.maxLength = 150
+
+    confirm.addEventListener("click", () => {
+      event.stopPropagation()
+      event.preventDefault()
+      card.parentNode.dataset.front = area.value
+      card.innerHTML = `<h3>${area.value}</h3><button class="card-edit" onclick="edit_card(this)">..</button>`
+
+    })
+  } else {
+    let text = card.parentNode.dataset.back
+    area.innerHTML = text
+    area.maxLength = 300
+
+    confirm.addEventListener("click", () => {
+      event.stopPropagation()
+      event.preventDefault()
+      card.parentNode.dataset.back = area.value
+      card.innerHTML = `<p>${area.value}</p><button class="card-edit" onclick="edit_card(this)">..</button>`
+    })
+  }
+  card.innerHTML = ''
+
+
+
+  card.appendChild(area)
+  card.appendChild(confirm)
+
+}
+
+
+/*
+for (let i = 0; i < document.getElementsByClassName("card-edit").length; i++) {
+  console.log(document.getElementsByClassName("card-edit")[i])
+  document.getElementsByClassName("card-edit")[i].addEventListener("click", (event) => {
+    event.stopPropagation()
+    event.preventDefault()
+  })
+}
+*/

@@ -14,12 +14,12 @@
             {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
                 <div class="cat_title">{{this.category_title}}<button onclick="deleteCat(this)">..</button></div>
                 {{#each this.card_list}}
-                <label>
+                <label class="flip">
                     <input type="checkbox" />
                     <div class="card" data-id={{this.card_id}} data-front="{{this.card_front}}" data-back="{{this.card_back}}"
                         data-index={{this.card_index}}>
-                        <div class="front">{{this.card_front}}</div>
-                        <div class="back">{{this.card_back}}</div>
+                        <div class="front"><h3>{{this.card_front}}</h3><button class="card-edit" onclick="edit_card(this)">..</button></div>
+                        <div class="back"><p>{{this.card_back}}</p><button class="card-edit" onclick="edit_card(this)">..</button></div>
                     </div>
                 </label>
                 {{/each}}<button id="createCard" onclick="createCard(this)">+</button>

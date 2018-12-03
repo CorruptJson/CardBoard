@@ -125,13 +125,6 @@ header {
 
 /* --------------Cards--------------- */
 
-.cards {
-    height: 200px;
-    border: 2px solid rgb(200, 200, 200);
-}
-
-/* -----------Card Flip ------------- */
-
 label {
     perspective: 1000px;
     transform-style: preserve-3d;
@@ -148,7 +141,7 @@ label {
     height: 100%;
     width: 100%;
     transform-style: preserve-3d;
-    transition: all 600ms;
+    transition: all 400ms;
     z-index: 20;
 }
 
@@ -158,7 +151,6 @@ label {
     width: 100%;
     background: #FFF;
     text-align: center;
-    line-height: 200px;
     backface-visibility: hidden;
     border-radius: 2px;
 }
@@ -169,12 +161,12 @@ label {
     transform: rotateY(180deg);
 }
 
-label:hover .card {
-    transform: rotateY(20deg);
+label:not(.nohover):hover .card {
+    transform: rotateY(8deg);
     box-shadow: 0 20px 20px rgba(50, 50, 50, .2);
 }
 
-input {
+input[type="checkbox"] {
     display: none;
 }
 
@@ -182,7 +174,29 @@ input {
     transform: rotateY(180deg);
 }
 
-label:hover :checked+.card {
-    transform: rotateY(160deg);
+label:not(.nohover):hover :checked+.card {
+    transform: rotateY(172deg);
     box-shadow: 0 20px 20px rgba(255, 255, 255, .2);
+}
+
+.card-edit {
+    top: 0px;
+    right: 0px;
+    position: absolute;
+}
+
+.nohover {
+    pointer-events: none
+}
+
+.front {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    vertical-align: middle;
+    
+}
+.back {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    vertical-align: middle;
 }
