@@ -195,6 +195,7 @@ const edit_card = async (username, id, text, side) => {
     throw "Invalid side"
   }
   if (card.rows[0]) {
+    console.log(card.rows[0])
     return card.rows[0]
   } else {
     throw "Error: Card cannot be modified (does not exist or card does not belong to user)"
@@ -202,7 +203,7 @@ const edit_card = async (username, id, text, side) => {
 
 }
 
-edit_card('jason', 96, "world", "back").then(res => console.log(res))
+//edit_card('jason', 96, "world", "back").then(res => console.log(res))
 //create_card('jason', 427, 'hello', 'world')
 //create_category(`jason`, `new_test`).then(res => console.log(res.rows[0].category_id))
 //run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
@@ -216,6 +217,7 @@ module.exports = {
   retrieve_cards,
   create_category,
   delete_category,
-  create_card
+  create_card,
+  edit_card
 }
 

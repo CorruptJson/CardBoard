@@ -192,7 +192,15 @@ app.post('/createCard', requireLogin, (request, response) => {
     })
 })
 
-app.post('/editCard', requireLogin, (request, response) => {})
+app.post('/editCard', requireLogin, (request, response) => {
+  const username = request.session.user
+  console.log(request.body)
+  const id = request.body.id
+  const text = request.body.text
+  const side = request.body.side
+  db.edit_card(username, id, text, side)
+    .then(res => {console.log(res); response.send(true)})
+})
 
 /**** Start Server ***/
 app.listen(port, console.log(`Server is up on the port ${port}, with PID: ${process.pid}`))

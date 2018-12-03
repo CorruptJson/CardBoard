@@ -141,6 +141,7 @@ const edit_card = (self) => {
     confirm.addEventListener("click", () => {
       event.stopPropagation()
       event.preventDefault()
+      edit_text_request(card.parentNode.dataset.id, area.value, "front")
       card.parentNode.dataset.front = area.value
       card.innerHTML = `<h3>${escape_HTML(area.value)}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button>`
 
@@ -153,6 +154,7 @@ const edit_card = (self) => {
     confirm.addEventListener("click", () => {
       event.stopPropagation()
       event.preventDefault()
+      edit_text_request(card.parentNode.dataset.id, area.value, "back")
       card.parentNode.dataset.back = area.value
       card.innerHTML = `<p>${escape_HTML(area.value)}</p><button class="card-edit" onclick="edit_card(this)">Edit</button>`
     })
@@ -161,13 +163,34 @@ const edit_card = (self) => {
 
   card.appendChild(area)
   card.appendChild(confirm)
-
 }
+
+
 
 const escape_HTML = (str) => {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+
+const edit_text_request = (id, text, side) => {
+  const data = {
+    id: id,
+    text: text,
+    side: side
+  }
+  fetch(`${url}/editCard`, {
+    method: 'post',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+    .then(res => {
+      if (res.redirected) {
+        alert("Your session has expired. Please log back in.")
+        window.location.href = "/"
+      }
+      return res.json()
+    })
+}
 
 /*
 for (let i = 0; i < document.getElementsByClassName("card-edit").length; i++) {
