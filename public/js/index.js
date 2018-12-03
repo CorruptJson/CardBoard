@@ -19,7 +19,7 @@ const addCat = () => {
         newDiv.dataset.id = res.id
         newDiv.dataset.title = `New Category`
         newDiv.dataset.index = res.index
-        newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}<button onclick="deleteCat(this)">..</button></div>`
+        newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}<button onclick="deleteCat(this)">..</button></div><button id="createCard" onclick="createCard(this)">+</button> `
 
         document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
       } else {
@@ -49,6 +49,33 @@ const deleteCat = (self) => {
         self.parentNode.parentNode.remove()
       } else {
         console.error('Error deleting card')
+      }
+    })
+}
+
+const createCard = (self) => {
+  const category_id = self.parentNode.dataset.id
+  const data = { id: category_id }
+  fetch(`${url}/createCard`, {
+    method: 'post',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+    .then(res => { return res.json() })
+    .then(res => {
+      console.log(res)
+      if (res) {
+        let newDiv = document.createElement("div")
+        newDiv.className = `cards`
+        newDiv.dataset.id = res.id
+        newDiv.dataset.front = res.front
+        newDiv.dataset.back = res.back
+        newDiv.dataset.index = res.index
+        newDiv.innerHTML = newDiv.dataset.front
+        console.log(newDiv, self.parentNode.childNodes[self.parentNode.childNodes.length -2])
+        self.parentNode.insertBefore(newDiv, self.parentNode.childNodes[self.parentNode.childNodes.length -2])
+      } else {
+        console.error('Error creating card')
       }
     })
 }

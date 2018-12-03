@@ -178,8 +178,13 @@ app.post('/createCard', requireLogin, (request, response) => {
   const id = request.body.id // id of category
   db.create_card(username, id, "front text here", "back text here")
     .then(res => {
-      //console.log(res.rows)
-      response.send(res.rows[0])
+      console.log(res.rows)
+      response.send({
+        id: res.rows[0].card_id,
+        index: res.rows[0].card_index,
+        front: res.rows[0].card_front,
+        back: res.rows[0].card_back,
+      })
     })
     .catch(err => {
       console.log(err)
