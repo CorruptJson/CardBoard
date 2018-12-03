@@ -65,15 +65,32 @@ const createCard = (self) => {
     .then(res => {
       console.log(res)
       if (res) {
+        let newLabel = document.createElement("label")
         let newDiv = document.createElement("div")
-        newDiv.className = `cards`
+        let newCheckbox = document.createElement("input")
+        let newFront = document.createElement("div")
+        let newBack = document.createElement("div")
+
+        newCheckbox.type = "checkbox"
+
+        newDiv.className = `card`
         newDiv.dataset.id = res.id
         newDiv.dataset.front = res.front
         newDiv.dataset.back = res.back
         newDiv.dataset.index = res.index
-        newDiv.innerHTML = newDiv.dataset.front
-        console.log(newDiv, self.parentNode.childNodes[self.parentNode.childNodes.length -2])
-        self.parentNode.insertBefore(newDiv, self.parentNode.childNodes[self.parentNode.childNodes.length -2])
+
+        newFront.className = "front"
+        newFront.innerHTML = newDiv.dataset.front
+        newBack.className = "back"
+        newBack.innerHTML = newDiv.dataset.back
+
+        newLabel.appendChild(newCheckbox)
+        newLabel.appendChild(newDiv)
+
+        newDiv.appendChild(newFront)
+        newDiv.appendChild(newBack)
+        self.parentNode.insertBefore(newLabel, self.parentNode.childNodes[self.parentNode.childNodes.length -2])
+
       } else {
         console.error('Error creating card')
       }
