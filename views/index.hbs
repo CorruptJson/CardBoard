@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html style="background-color:rgb(7, 192, 7)">
+<html style="background-color:rgb(224, 232, 252)">
 
 <head>
     <link rel="stylesheet" href="css/style.css">
@@ -8,18 +8,19 @@
 </head>
 
 <body>
-    {{>header}}
-    <div id="cat_container">
-        {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
-            <div class="cat_title">{{this.category_title}}<button onclick="deleteCat(this)">..</button></div>
-            {{#each this.card_list}}
-            <div class="cards" data-id={{this.card_id}} data-front="{{this.card_front}}" data-back="{{this.card_back}}" data-index={{this.card_index}}>{{this.card_front}}</div>
-            {{/each}}<button id="createCard" onclick="createCard(this)">+</button>
-        </div>{{/each}}<input id="createCat" type="button" value="+" onclick="addCat()"/>
+    <div class="grid-container">
+        {{>header}}
+        <div id="cat_container">
+            {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
+                <div class="cat_title">{{this.category_title}}<button onclick="deleteCat(this)">..</button></div>
+                {{#each this.card_list}}
+                <div class="cards" data-id={{this.card_id}} data-front="{{this.card_front}}" data-back="{{this.card_back}}" data-index={{this.card_index}}>{{this.card_front}}</div>
+                {{/each}}<button id="createCard" onclick="createCard(this)">+</button>
+            </div>{{/each}}<input id="createCat" type="button" value="+" onclick="addCat()"/>
 
+        </div>
+        
     </div>
-
-
 
 </body>
 
