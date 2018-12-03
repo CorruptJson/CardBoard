@@ -155,6 +155,10 @@ app.post('/createCategory', requireLogin, (request, response) => {
         index: res.rows[0].category_index
       })
     })
+    .catch(err => {
+      console.log(err)
+      response.send(false)
+    })
 })
 
 app.post('/deleteCategory', requireLogin, (request, response) => {
@@ -163,8 +167,27 @@ app.post('/deleteCategory', requireLogin, (request, response) => {
   console.log(username, id)
   db.delete_category(username, id)
     .then(res => response.send(true))
-    .catch(res => {
-      console.log(res)
+    .catch(err => {
+      console.log(err)
+      response.send(false)
+    })
+})
+
+app.post('/createCard', requireLogin, (request, response) => {
+  const username = request.session.user
+  const id = request.body.id // id of category
+  db.create_card(username, id, "front text here", "back text here")
+    .then(res => {
+      console.log(res.rows)
+      response.send({
+        id: res.rows[0].card_id,
+        index: res.rows[0].card_index,
+        front: res.rows[0].card_front,
+        back: res.rows[0].card_back,
+      })
+    })
+    .catch(err => {
+      console.log(err)
       response.send(false)
     })
 })

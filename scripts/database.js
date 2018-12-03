@@ -50,23 +50,55 @@ const retrieveUser = async (username) => {
   }
 }
 
-/* Creates category */
+/* Creates category, and locks user's categories during query.*/
 const create_category = async (username, title) => {
-  const query = `
-    INSERT INTO category (username, category_title, category_index)
-      VALUES ($1, $2, (
-        SELECT CASE
-          WHEN MAX(category_index) ISNULL then 0
-          ELSE MAX(category_index) + 1
-        END
-        FROM category
-        WHERE username = $3
-      ))
-    RETURNING *`
 
-  return await run_query(query, [username, title, username])
+  const queryLock = `
+  SELECT category_index
+  FROM category
+  WHERE username = $1
+  FOR UPDATE`
+
+  const query = `
+  INSERT INTO category (username, category_title, category_index)
+    VALUES ($1, $2, (
+      SELECT CASE
+        WHEN MAX(category_index) ISNULL then 0
+        ELSE MAX(category_index) + 1
+      END
+      FROM category
+      WHERE username = $3
+    ))
+  RETURNING *`
+
+  const client = await pool.connect()
+
+  try {
+    await client.query('BEGIN')
+    //BEGIN TRANSACTION
+    await client.query(queryLock, [username]) // LOCK
+    var newCategory = await run_query(query, [username, title, username])
+
+    //END TRANSACTION
+    await client.query(`COMMIT`)
+  } catch (e) {
+    await client.query(`ROLLBACK`)
+    throw e
+  } finally {
+    await client.release()
+  }
+
+  return newCategory
 }
 
+/**
+ * Checks if category belongs to user,
+ * then creates a card in that category
+ * @param {string} username
+ * @param {number} category_id
+ * @param {string} card_front
+ * @param {string} card_back
+ */
 const create_card = async (username, category_id, card_front, card_back) => {
   const query = `
     INSERT INTO card (category_id, card_front, card_back, card_index)
@@ -82,25 +114,30 @@ const create_card = async (username, category_id, card_front, card_back) => {
 
   const validateQuery = `
     SELECT * FROM category
-    WHERE username = $1 AND category_id = $2`
+    WHERE username = $1 AND category_id = $2
+    FOR UPDATE`
 
   const client = await pool.connect()
   try {
     await client.query('BEGIN')
-    const validation = await client.query(validateQuery, [username, category_id])
+    //BEGIN TRANSACTION
+    const validation = await client.query(validateQuery, [username, category_id]) // Also locks category
     if (validation.rows[0]) {
-      await client.query(query, [category_id, card_front, card_back, category_id])
+      var new_card = await client.query(query, [category_id, card_front, card_back, category_id])
     } else {
       throw `Category does not belong to user`
     }
-    client.query(`COMMIT`)
-  } catch (e){
-    client.query('ROLLBACK')
+
+    //END TRANSACTION
+    await client.query(`COMMIT`)
+  } catch (e) {
+    await client.query('ROLLBACK')
     throw e
   } finally {
-    client.release()
+    await client.release()
   }
-  return
+
+  return new_card
 }
 
 
@@ -111,7 +148,7 @@ const retrieve_categories = async (username) => {
 
 /* Returns cards with matching user */
 const retrieve_cards = async (username) => {
-  return await run_query(`SELECT * from card WHERE category_id in (SELECT category_id FROM category WHERE username = $1)`, [username])
+  return await run_query(`SELECT * from card WHERE category_id in (SELECT category_id FROM category WHERE username = $1) ORDER BY card_index`, [username])
 }
 
 
@@ -136,14 +173,14 @@ const delete_category = async (username, id) => {
     await client.query('ROLLBACK')
     throw e
   } finally {
-    client.release()
+    await client.release()
   }
   return
 
 }
 
 
-create_card('jason', 427, 'hello', 'world')
+//create_card('jason', 427, 'hello', 'world')
 //create_category(`jason`, `new_test`).then(res => console.log(res.rows[0].category_id))
 //run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
 run_query(`SELECT * from card`).then(res => console.log(res.rows))
@@ -155,6 +192,7 @@ module.exports = {
   retrieve_categories,
   retrieve_cards,
   create_category,
-  delete_category
+  delete_category,
+  create_card
 }
 
