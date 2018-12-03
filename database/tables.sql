@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS "category"
 CREATE TABLE IF NOT EXISTS "card"
 (
     "card_id" serial PRIMARY KEY,
-    "category_id" serial REFERENCES category(category_id),
+    "category_id" serial REFERENCES category(category_id) ON DELETE CASCADE,
     "card_index" int NOT NULL,
     "card_front" varchar(150),
     "card_back" varchar(300)
