@@ -1,3 +1,7 @@
+//Set url to '/'
+window.history.pushState("", "", '/')
+
+//if url is heroku, us https
 if (window.location.hostname == 'cardboard-project.herokuapp.com') {
   var url = `https://${window.location.hostname}:${location.port}`
 } else {
