@@ -5,7 +5,7 @@ if (window.location.hostname == 'cardboard-project.herokuapp.com') {
 }
 
 console.log(url)
-//Edit button <button id="createCard" onclick="createCard(this)">+</button>
+//Edit button <button class="card-edit" onclick="edit_card(this)">Edit</button>
 
 const addCat = () => {
   fetch(`${url}/createCategory`, {
@@ -82,9 +82,9 @@ const createCard = (self) => {
         newDiv.dataset.index = res.index
 
         newFront.className = "front"
-        newFront.innerHTML = newDiv.dataset.front
+        newFront.innerHTML = `<h3>${newDiv.dataset.front}</h3>`
         newBack.className = "back"
-        newBack.innerHTML = newDiv.dataset.back
+        newBack.innerHTML = `<p>${newDiv.dataset.back}</p>`
 
         newLabel.appendChild(newCheckbox)
         newLabel.appendChild(newDiv)
@@ -105,8 +105,10 @@ const edit_card = (self) => {
   let card = self.parentNode
   let area = document.createElement("textarea")
   let confirm = document.createElement("button")
-  area.rows = 8
-  area.cols = 24
+  area.style.position = "relative"
+  area.style.height = "160px"
+  area.style.width = "230px"
+  confirm.className = "confirm-card"
   confirm.innerHTML = "✔"
 
   if (card.className == "front") {

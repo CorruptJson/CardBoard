@@ -193,10 +193,15 @@ label:not(.nohover):hover :checked+.card {
     white-space: pre-wrap;
     word-wrap: break-word;
     vertical-align: middle;
-    
 }
+
 .back {
     white-space: pre-wrap;
     word-wrap: break-word;
     vertical-align: middle;
+}
+
+.confirm-card {
+    margin:auto;
+    width: 80px;
 }
