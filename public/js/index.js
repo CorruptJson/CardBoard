@@ -15,7 +15,13 @@ const addCat = () => {
   fetch(`${url}/createCategory`, {
     method: 'post',
   })
-    .then(res => { return res.json() })
+    .then(res => {
+      if (res.redirected) {
+        alert("Your session has expired. Please log back in.")
+        window.location.href = "/"
+      }
+      return res.json()
+    })
     .then(res => {
       if (res) {
         let newDiv = document.createElement("div")
@@ -23,7 +29,7 @@ const addCat = () => {
         newDiv.dataset.id = res.id
         newDiv.dataset.title = `New Category`
         newDiv.dataset.index = res.index
-        newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}<button onclick="deleteCat(this)">..</button></div><button id="createCard" onclick="createCard(this)">+</button> `
+        newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}<button class="delCatButton" onclick="deleteCat(this)">x</button></div><button id="createCard" onclick="createCard(this)">+</button> `
 
         document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
       } else {
@@ -33,28 +39,36 @@ const addCat = () => {
 }
 
 const deleteCat = (self) => {
-  const id = self.parentNode.parentNode.dataset.id
-  const categories = document.getElementsByClassName("categories")
-  const data = { id: id }
-  fetch(`${url}/deleteCategory`, {
-    method: 'post',
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-    .then(res => { return res.json() })
-    .then(res => {
-      if (res) {
-        const index = parseInt(self.parentNode.parentNode.dataset.index)
-        for (let i = 0; i < categories.length; i++) {
-          if (parseInt(categories[i].dataset.index) > index) {
-            categories[i].dataset.index -= 1
-          }
-        }
-        self.parentNode.parentNode.remove()
-      } else {
-        console.error('Error deleting card')
-      }
+  if (confirm(`Delete Category "${self.parentNode.parentNode.dataset.title}"?`)) {
+    const id = self.parentNode.parentNode.dataset.id
+    const categories = document.getElementsByClassName("categories")
+    const data = { id: id }
+    fetch(`${url}/deleteCategory`, {
+      method: 'post',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
     })
+      .then(res => {
+        if (res.redirected) {
+          alert("Your session has expired. Please log back in.")
+          window.location.href = "/"
+        }
+        return res.json()
+      })
+      .then(res => {
+        if (res) {
+          const index = parseInt(self.parentNode.parentNode.dataset.index)
+          for (let i = 0; i < categories.length; i++) {
+            if (parseInt(categories[i].dataset.index) > index) {
+              categories[i].dataset.index -= 1
+            }
+          }
+          self.parentNode.parentNode.remove()
+        } else {
+          console.error('Error deleting card')
+        }
+      })
+  }
 }
 
 const createCard = (self) => {
@@ -65,7 +79,13 @@ const createCard = (self) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
-    .then(res => { return res.json() })
+    .then(res => {
+      if (res.redirected) {
+        alert("Your session has expired. Please log back in.")
+        window.location.href = "/"
+      }
+      return res.json()
+    })
     .then(res => {
       console.log(res)
       if (res) {
@@ -78,6 +98,7 @@ const createCard = (self) => {
         newLabel.className = "flip"
 
         newCheckbox.type = "checkbox"
+        newCheckbox.className = "invisCheck"
 
         newDiv.className = `card`
         newDiv.dataset.id = res.id
@@ -112,6 +133,7 @@ const edit_card = (self) => {
   area.style.position = "relative"
   area.style.height = "160px"
   area.style.width = "230px"
+  area.style.resize = "none"
   confirm.className = "confirm-card"
   confirm.innerHTML = "✔"
 
@@ -123,6 +145,7 @@ const edit_card = (self) => {
     confirm.addEventListener("click", () => {
       event.stopPropagation()
       event.preventDefault()
+      edit_text_request(card.parentNode.dataset.id, area.value, "front")
       card.parentNode.dataset.front = area.value
       card.innerHTML = `<h3>${escape_HTML(area.value)}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button>`
 
@@ -135,23 +158,43 @@ const edit_card = (self) => {
     confirm.addEventListener("click", () => {
       event.stopPropagation()
       event.preventDefault()
+      edit_text_request(card.parentNode.dataset.id, area.value, "back")
       card.parentNode.dataset.back = area.value
       card.innerHTML = `<p>${escape_HTML(area.value)}</p><button class="card-edit" onclick="edit_card(this)">Edit</button>`
     })
   }
   card.innerHTML = ''
 
-
-
   card.appendChild(area)
   card.appendChild(confirm)
-
 }
+
+
 
 const escape_HTML = (str) => {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+
+const edit_text_request = (id, text, side) => {
+  const data = {
+    id: id,
+    text: text,
+    side: side
+  }
+  fetch(`${url}/editCard`, {
+    method: 'post',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+    .then(res => {
+      if (res.redirected) {
+        alert("Your session has expired. Please log back in.")
+        window.location.href = "/"
+      }
+      return res.json()
+    })
+}
 
 /*
 for (let i = 0; i < document.getElementsByClassName("card-edit").length; i++) {

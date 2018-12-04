@@ -77,7 +77,7 @@ header {
     display: block;
     border: 0px none rgb(240, 240, 240);
     -webkit-appearance: none;
-    -webkit-border-radius: 6px;
+    border-radius: 6px;
     background-color: white;
     text-align: right;
 }
@@ -120,11 +120,17 @@ header {
     font-size: 20px;
     text-decoration: underline;
     background-color: rgb(230, 230, 230);
+    position: relative;
+}
+
+.delCatButton {
+    right: 0px;
+    position: absolute;
 }
 
 /* --------------Cards--------------- */
 
-label {
+.flip {
     perspective: 1000px;
     transform-style: preserve-3d;
     display: block;
@@ -159,12 +165,7 @@ label {
     transform: rotateY(180deg);
 }
 
-label:not(.nohover):hover .card {
-    transform: rotateY(8deg);
-    box-shadow: 0 20px 20px rgba(50, 50, 50, .2);
-}
-
-input[type="checkbox"] {
+.invisCheck {
     display: none;
 }
 
@@ -172,9 +173,24 @@ input[type="checkbox"] {
     transform: rotateY(180deg);
 }
 
-label:not(.nohover):hover :checked+.card {
+/*  Hover CSS. Ignore these.
+label:hover :checked+.card {
     transform: rotateY(172deg);
     box-shadow: 0 20px 20px rgba(255, 255, 255, .2);
+}
+
+label:hover .card {
+    transform: rotateY(8deg);
+    box-shadow: 0 20px 20px rgba(50, 50, 50, .2);
+}
+*/
+
+label:hover :checked+.card {
+    box-shadow: 0 20px 20px rgba(255, 255, 255, .2);
+}
+
+label:hover .card {
+    box-shadow: 0 20px 20px rgba(50, 50, 50, .2);
 }
 
 .card-edit {
@@ -198,13 +214,20 @@ label:not(.nohover):hover :checked+.card {
     white-space: pre-wrap;
     word-wrap: break-word;
     vertical-align: middle;
+    text-align: center;
 }
 
 .confirm-card {
-    margin:auto;
+    margin: auto;
     width: 80px;
 }
 
 p {
-    margin:14px;
+    margin: 14px;
+    text-align: left;
+    font-size: 16px;
+}
+
+button {
+    user-select: none;
 }
