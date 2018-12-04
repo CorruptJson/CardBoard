@@ -149,14 +149,13 @@ app.post('/createCategory', requireLogin, (request, response) => {
   const username = request.session.user
   db.create_category(username, "New Category")
     .then(res => {
-      console.log(res.rows[0])
       response.send({
         id: res.rows[0].category_id,
         index: res.rows[0].category_index
       })
     })
     .catch(err => {
-      console.log(err)
+      console.error(err)
       response.send(false)
     })
 })
@@ -164,11 +163,10 @@ app.post('/createCategory', requireLogin, (request, response) => {
 app.post('/deleteCategory', requireLogin, (request, response) => {
   const username = request.session.user
   const id = request.body.id
-  console.log(username, id)
   db.delete_category(username, id)
     .then(res => response.send(true))
     .catch(err => {
-      console.log(err)
+      console.error(err)
       response.send(false)
     })
 })
@@ -178,7 +176,6 @@ app.post('/createCard', requireLogin, (request, response) => {
   const id = request.body.id // id of category
   db.create_card(username, id, "front text here", "back text here")
     .then(res => {
-      console.log(res.rows)
       response.send({
         id: res.rows[0].card_id,
         index: res.rows[0].card_index,
@@ -187,19 +184,18 @@ app.post('/createCard', requireLogin, (request, response) => {
       })
     })
     .catch(err => {
-      console.log(err)
+      console.error(err)
       response.send(false)
     })
 })
 
 app.post('/editCard', requireLogin, (request, response) => {
   const username = request.session.user
-  console.log(request.body)
   const id = request.body.id
   const text = request.body.text
   const side = request.body.side
   db.edit_card(username, id, text, side)
-    .then(res => {console.log(res); response.send(true)})
+    .then(res => { response.send(true) })
 })
 
 /**** Start Server ***/
