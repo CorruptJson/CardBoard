@@ -187,7 +187,7 @@ label:hover .card {
 */
 
 label:hover :checked+.card {
-    box-shadow: 0 20px 20px rgba(255, 255, 255, .2);
+    box-shadow: 0 20px 20px rgba(50, 50, 50, .3);
 }
 
 label:hover .card {

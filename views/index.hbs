@@ -12,7 +12,7 @@
         {{>header}}
         <div id="cat_container">
             {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
-                <div class="cat_title">{{this.category_title}}<button class="delCatButton" onclick="deleteCat(this)">x</button></div>
+                <div class="cat_title"><u onclick="edit_title(this)">{{this.category_title}}</u><button class="delCatButton" onclick="deleteCat(this)">x</button></div>
                 {{#each this.card_list}}
                 <label class="flip">
                     <input type="checkbox" class="invisCheck"/>

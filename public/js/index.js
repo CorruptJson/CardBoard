@@ -29,7 +29,7 @@ const addCat = () => {
         newDiv.dataset.id = res.id
         newDiv.dataset.title = `New Category`
         newDiv.dataset.index = res.index
-        newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}<button class="delCatButton" onclick="deleteCat(this)">x</button></div><button id="createCard" onclick="createCard(this)">+</button> `
+        newDiv.innerHTML = `<div class="cat_title"><u onclick="edit_title(this)">${newDiv.dataset.title}</u><button class="delCatButton" onclick="deleteCat(this)">x</button></div><button id="createCard" onclick="createCard(this)">+</button> `
 
         document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
       } else {
@@ -124,12 +124,54 @@ const createCard = (self) => {
     })
 }
 
+const edit_title = (self) => {
+  const category = self.parentNode.parentNode
+  const parent = self.parentNode
+  const textField = document.createElement("input")
+  textField.type = "text"
+  textField.maxLength = 32
+  textField.value = category.dataset.title
+
+  textField.addEventListener("keypress", (e) => {
+    if (e.keyCode === 13) {
+
+      const text = textField.value
+      const id = category.dataset.id
+      const titleHeader = self
+      const data = {
+        id: id,
+        text: text,
+      }
+      titleHeader.innerHTML = escape_HTML(text)
+      category.dataset.title = text
+      parent.replaceChild(titleHeader, textField)
+      fetch(`${url}/editCategory`, {
+        method: 'post',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+        .then(res => {
+          if (res.redirected) {
+            alert("Your session has expired. Please log back in.")
+            window.location.href = "/"
+          }
+          return res.json()
+        })
+    }
+  })
+
+  parent.replaceChild(textField, self)
+
+
+}
+
+
 const edit_card = (self) => {
   event.stopPropagation()
   event.preventDefault()
-  let card = self.parentNode
-  let area = document.createElement("textarea")
-  let confirm = document.createElement("button")
+  const card = self.parentNode
+  const area = document.createElement("textarea")
+  const confirm = document.createElement("button")
   area.style.position = "relative"
   area.style.height = "160px"
   area.style.width = "230px"
@@ -172,7 +214,7 @@ const edit_card = (self) => {
 
 
 const escape_HTML = (str) => {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 
@@ -205,3 +247,5 @@ for (let i = 0; i < document.getElementsByClassName("card-edit").length; i++) {
   })
 }
 */
+
+
