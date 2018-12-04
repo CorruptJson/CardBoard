@@ -196,6 +196,36 @@ const edit_text_request = (id, text, side) => {
     })
 }
 
+//function getChildren(n, skipMe) {
+//  var r = [];
+//  for (; n; n = n.nextSibling)
+//    if (n.nodeType == 1 && n != skipMe)
+//      r.push(n);
+//  return r;
+//};
+
+//function getSiblings(n) {
+//  return getChildren(n.parentNode.firstChild, n);
+//}
+
+const flash_mode = (self) => {
+  document.getElementById("cat_container").style.display = "none";
+  document.getElementById("stack_card").style.display = "block";
+
+  let card = self.parentNode.childNodes
+    
+  flash_cards = []
+  card.forEach(function (el) {
+    if (el.tagName == "LABEL") {
+      flash_cards.push(el);     
+    };
+  })
+
+  document.getElementById("stack_card").appendChild(flash_cards[(Math.floor(Math.random() * flash_cards.length))]) 
+}
+
+
+
 /*
 for (let i = 0; i < document.getElementsByClassName("card-edit").length; i++) {
   console.log(document.getElementsByClassName("card-edit")[i])

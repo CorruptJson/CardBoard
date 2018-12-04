@@ -12,6 +12,7 @@
         {{>header}}
         <div id="cat_container">
             {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
+                <input class="flash_button" type="button" value="Flash card mode" onclick="flash_mode(this)">
                 <div class="cat_title">{{this.category_title}}<button class="delCatButton" onclick="deleteCat(this)">x</button></div>
                 {{#each this.card_list}}
                 <label class="flip">
@@ -24,6 +25,9 @@
                 </label>
                 {{/each}}<button id="createCard" onclick="createCard(this)">+</button>
             </div>{{/each}}<input id="createCat" type="button" value="+" onclick="addCat()" />
+
+        </div>
+        <div id="stack_card">
 
         </div>
 
