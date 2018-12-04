@@ -100,6 +100,15 @@ const createCard = (self) => {
         newCheckbox.type = "checkbox"
         newCheckbox.className = "invisCheck"
 
+        newCheckbox.addEventListener("change", (e) => {
+          console.log(newCheckbox.parentNode.childNodes[1].childNodes[0])
+          if (newCheckbox.checked) {
+            newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "none"
+          } else {
+            newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "initial"
+          }
+        })
+
         newDiv.className = `card`
         newDiv.dataset.id = res.id
         newDiv.dataset.front = res.front
@@ -113,6 +122,7 @@ const createCard = (self) => {
 
         newLabel.appendChild(newCheckbox)
         newLabel.appendChild(newDiv)
+
 
         newDiv.appendChild(newFront)
         newDiv.appendChild(newBack)
@@ -172,6 +182,7 @@ const edit_card = (self) => {
   const card = self.parentNode
   const area = document.createElement("textarea")
   const confirm = document.createElement("button")
+  area.className = "frontTextArea"
   area.style.position = "relative"
   area.style.height = "160px"
   area.style.width = "230px"
@@ -238,14 +249,13 @@ const edit_text_request = (id, text, side) => {
     })
 }
 
-/*
-for (let i = 0; i < document.getElementsByClassName("card-edit").length; i++) {
-  console.log(document.getElementsByClassName("card-edit")[i])
-  document.getElementsByClassName("card-edit")[i].addEventListener("click", (event) => {
-    event.stopPropagation()
-    event.preventDefault()
-  })
+
+const cardCheckbox = (self) => {
+  if (self.checked) {
+
+    console.log(self.parentNode.childNodes)
+    self.parentNode.childNodes[3].childNodes[1].style.pointerEvents = "none"
+  } else {
+    self.parentNode.childNodes[3].childNodes[1].style.pointerEvents = "initial"
+  }
 }
-*/
-
-

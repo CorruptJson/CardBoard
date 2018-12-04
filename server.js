@@ -58,6 +58,9 @@ const createBoardDivs = async (username) => {
 }
 
 
+
+
+
 /**** Middlewares ***/
 app.set('view engine', 'hbs')
 
