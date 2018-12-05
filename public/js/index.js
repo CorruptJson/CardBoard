@@ -29,7 +29,7 @@ const addCat = () => {
         newDiv.dataset.id = res.id
         newDiv.dataset.title = `New Category`
         newDiv.dataset.index = res.index
-        newDiv.innerHTML = `<div class="cat_title"><u onclick="edit_title(this)">${newDiv.dataset.title}</u><button class="delCatButton" onclick="deleteCat(this)">x</button></div><button id="createCard" onclick="createCard(this)">+</button> `
+        newDiv.insertAdjacentHTML('afterbegin', `<div class="cat_title"><u onclick="edit_title(this)">${newDiv.dataset.title}</u><button class="delCatButton" onclick="deleteCat(this)">x</button></div><input class="flash_button" type="button" value="Flash card mode" onclick="flash_mode(this)"> <div id="card_container"> <button class="createCard" onclick="createCard(this)">+</button> </div>`)
 
         document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
       } else {
@@ -72,7 +72,7 @@ const deleteCat = (self) => {
 }
 
 const createCard = (self) => {
-  const category_id = self.parentNode.dataset.id
+  const category_id = self.parentNode.parentNode.dataset.id
   const data = { id: category_id }
   fetch(`${url}/createCard`, {
     method: 'post',
@@ -249,162 +249,6 @@ const edit_text_request = (id, text, side) => {
     })
 }
 
-var flash_cards = [];
-var stack = [];
-var index = 0;
-
-const flash_mode = (self) => {
-  let next_card = document.getElementById("next_card");
-  let card = self.parentNode.childNodes
-  var i = 0
-  card.forEach(function (el) {
-    if (el.tagName == "LABEL") {
-      let newLabel = document.createElement("label")
-      let newDiv = document.createElement("div")
-      let newCheckbox = document.createElement("input")
-      let newFront = document.createElement("div")
-      let newBack = document.createElement("div")
-      var dot = '<input type="radio" name="dot" value =' + i + ' id="radio' + i + '" onclick="spec_card()">'
-
-      newLabel.className = "flip"
-
-      newCheckbox.type = "checkbox"
-      newCheckbox.className = "invisCheck"
-
-      newCheckbox.addEventListener("change", (e) => {
-        if (newCheckbox.checked) {
-          newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "none"
-        } else {
-           newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "initial"
-        }
-      })
-
-      newDiv.className = `card`
-      newDiv.id = i
-      newDiv.front = el.childNodes[3].childNodes[1].childNodes[0].innerHTML
-      newDiv.back = el.childNodes[3].childNodes[3].childNodes[0].innerHTML
-      newDiv.index = el.index
-
-      newFront.className = "front"
-      newFront.innerHTML = `<h3>${newDiv.front}</h3>`
-      newBack.className = "back"
-      newBack.innerHTML = `<p>${newDiv.back}</p>`
-
-      newLabel.appendChild(newCheckbox)
-      newLabel.appendChild(newDiv)
-
-      newDiv.appendChild(newFront)
-      newDiv.appendChild(newBack)
-      // self.parentNode.insertBefore(newLabel, self.parentNode.childNodes[self.parentNode.childNodes.length - 2])
-      newLabel.id = "unik"
-      
-      document.getElementById("dots").innerHTML += dot;
-
-      flash_cards.push(newLabel);
-      i ++
-      //stack = flash_cards.slice();
-    };
-  })
-  if (flash_cards != 0) {
-    document.getElementById("stack_back").style.display = "block";
-    document.getElementById("stack_container").style.display = "block";
-    
-    for (i = 0; i < flash_cards.length; i++) {
-      stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i]) 
-    }
-
-    document.getElementById("radio0").checked = true;
-    stack_card.innerHTML = '';
-    stack_card.appendChild(stack[index]);
-
-    for (i = 0; i < flash_cards.length; i++) {
-      stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i])
-    }
-    stack_card.innerHTML = '';
-    stack_card.appendChild(stack[index]);
-    
-    if (index == stack.length - 1) {
-      document.getElementById("back_card").style.display = "inline-block";
-      document.getElementById("next_card").style.display = "none";
-    }
-  }
-}
-
-const next_card = () => {
-  let stack_card = document.getElementById("stack_card");
-  if (index < (stack.length - 1)) {
-    document.getElementById("reverse_card").style.display = "inline-block";
-    index += 1;
-  }
-  if (index == stack.length - 1) {
-    document.getElementById("back_card").style.display = "inline-block";
-    document.getElementById("next_card").style.display = "none";
-
-  }
-  if (index == stack.length - 1) {
-    document.getElementById("back_card").style.display = "inline-block";
-    document.getElementById("next_card").style.display = "none";
-  }
-  document.getElementById("radio" + index).checked = true;
-  stack_card.innerHTML = '';
-  stack_card.appendChild(stack[index]);
-}
-
-const reverse_button = () => {
-  let stack_card = document.getElementById("stack_card");
-  if (index > 0) {
-    index -= 1;
-    document.getElementById("back_card").style.display = "none";
-    document.getElementById("next_card").style.display = "inline-block";
-  }
-  if (index == 0) {
-    document.getElementById("reverse_card").style.display = "none";
-
-  }
-  document.getElementById("radio" + index).checked = true;
-  stack_card.innerHTML = '';
-  stack_card.appendChild(stack[index]);
-}
-
-const spec_card = () => {
-  let stack_card = document.getElementById("stack_card");
-  let radiobtn = document.getElementById("radio" + index);
-  for (i = 0; i < stack.length; i++) {
-       if (document.getElementById("radio" + i).checked == true) {
-        index = i;
-       }
-    }
-  if (index == 0) {
-    document.getElementById("reverse_card").style.display = "none";
-    document.getElementById("back_card").style.display = "none";
-    document.getElementById("next_card").style.display = "inline-block";
-  } else if (index == stack.length - 1) {
-    document.getElementById("reverse_card").style.display = "inline-block";
-    document.getElementById("back_card").style.display = "inline-block";
-    document.getElementById("next_card").style.display = "none";
-  } else {
-    document.getElementById("reverse_card").style.display = "inline-block";
-    document.getElementById("back_card").style.display = "none";
-    document.getElementById("next_card").style.display = "inline-block";
-  }
-  stack_card.innerHTML = '';
-  stack_card.appendChild(stack[index]);
-}
-
-const take_a_life = () => {
-  flash_cards = [];
-  stack = [];
-  index = 0;
-  document.getElementById("back_card").style.display = "none";
-  document.getElementById("reverse_card").style.display = "none";
-  document.getElementById("stack_container").style.display = "none";
-  document.getElementById("stack_back").style.display = "none";
-  document.getElementById("next_card").style.display = "inline-block";
-
-  while (document.getElementById("dots").firstChild) {
-    document.getElementById("dots").removeChild(document.getElementById("dots").firstChild);
-  }
-}
 
 const cardCheckbox = (self) => {
   if (self.checked) {

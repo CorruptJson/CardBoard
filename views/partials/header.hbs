@@ -2,17 +2,15 @@
     <a>
         <img id="logo" src="cardboard.png" />
         <div id="title">CardBoard</div>
-
+        <span>Hello {{user}}</span>
     </a>
-    <div class="dropdown" id="user">
-    	<span>{{user}}</span>
-    	<div class="dropdown-content">
-    		<form action="/logout" method="post">
-    			<button type="submit" class="mybutton">Logout</button>
-    		</form>
-    	</div>
+
+    <div id="header_tab">
+
+        <form action="/logout" method="post">
+            <button type="submit" class="mybutton">Logout</button>
+        </form>
     </div>
-    
+
+
 </header>
-
-

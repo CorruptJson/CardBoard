@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html style="background-color:white">
+<html style="background-color:lightblue">
 
 <head>
     <link rel="stylesheet" href="css/style.css">
@@ -8,42 +8,40 @@
 </head>
 
 <body>
-    <div class="grid-container">
-        {{>header}}
-        <div id="cat_container">
+    {{>header}}
+    <div id="cat_container">
 
-            {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
-                <input class="flash_button" type="button" value="Flash card mode" onclick="flash_mode(this)">
-                <div class="cat_title"><u onclick="edit_title(this)">{{this.category_title}}</u><button class="delCatButton" onclick="deleteCat(this)">x</button></div>
+        {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}"
+            data-index="{{this.category_index}}">
+
+            <div class="cat_title"><u onclick="edit_title(this)">{{this.category_title}}</u><button class="delCatButton"
+                    onclick="deleteCat(this)">x</button></div>
+            <input class="flash_button" type="button" value="Flash card mode" onclick="flash_mode(this)">
+            <div id="card_container">
                 {{#each this.card_list}}
                 <label class="flip">
                     <input type="checkbox" class="invisCheck" onchange="cardCheckbox(this)" />
-        
+
                     <div class="card" data-id={{this.card_id}} data-front="{{this.card_front}}" data-back="{{this.card_back}}"
-                         data-index={{this.card_index}}>
-                        <div class="front"><h3>{{this.card_front}}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button></div>
-                        <div class="back"><p>{{this.card_back}}</p><button class="card-edit" onclick="edit_card(this)">Edit</button></div>
+                        data-index={{this.card_index}}>
+                        <div class="front">
+                            <h3>{{this.card_front}}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button>
+                        </div>
+                        <div class="back">
+                            <p>{{this.card_back}}</p><button class="card-edit" onclick="edit_card(this)">Edit</button>
+                        </div>
                     </div>
                 </label>
-                {{/each}}<button id="createCard" onclick="createCard(this)">+</button>
-            </div>{{/each}}<input id="createCat" type="button" value="+" onclick="addCat()" />
-
-        </div>
-
-        <div id="stack_back" onclick="take_a_life()"></div>
-        <div id="stack_container">
-            <div id="stack_window">
-                <div id="stack_card"></div>
-                <input id="reverse_card" type="button" value="<" onclick="reverse_button()">
-                <input id="next_card" type="button" value=">" onclick="next_card()">
-                <input id="back_card" type="button" value="back" onclick="take_a_life()">
-                <form action="" id="dots"></form>
+                {{/each}}<button class="createCard" onclick="createCard(this)">+</button>
             </div>
-        </div>
+        </div>{{/each}}<input id="createCat" type="button" value="+" onclick="addCat()" />
+
+    </div>
     </div>
 
 </body>
 
 <script src='js/index.js'></script>
+<script src='js/flash_mode.js'></script>
 
 </html>

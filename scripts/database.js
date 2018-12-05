@@ -77,7 +77,7 @@ const create_category = async (username, title) => {
     await client.query('BEGIN')
     //BEGIN TRANSACTION
     await client.query(queryLock, [username]) // LOCK
-    var newCategory = await run_query(query, [username, title, username])
+    var newCategory = await client.query(query, [username, title, username])
 
     //END TRANSACTION
     await client.query(`COMMIT`)
@@ -162,6 +162,7 @@ const delete_category = async (username, id) => {
   const client = await pool.connect()
   try {
     await client.query('BEGIN')
+    await client.query("SELECT * from category WHERE username = $1 FOR UPDATE", [username])
     const deleted = await client.query("DELETE from category WHERE username = $1 and category_id = $2 RETURNING category_index", [username, id])
     if (deleted.rows[0]) {
       await client.query(`UPDATE category SET category_index = category_index - 1 WHERE category_index > $1`, [deleted.rows[0].category_index])
@@ -214,7 +215,74 @@ const edit_card = async (username, id, text, side) => {
   }
 }
 
-//run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
+const move_category = async (username, id, newpos) => {
+  const queryLock = `
+  SELECT category_index
+  FROM category
+  WHERE username = $1
+  FOR UPDATE`
+
+  const queryIndex = `
+  SELECT MAX(category_index)
+  FROM category
+  WHERE username = $1`
+
+  const queryPos = `SELECT category_index from category WHERE category_id = $1`
+
+  const queryShiftUp = `
+  UPDATE category
+  SET category_index = category_index + 1
+  WHERE category_index >= $1 AND category_index <= $2`
+
+  const queryShiftDown = `
+  UPDATE category
+  SET category_index = category_index - 1
+  WHERE category_index =< $1 AND category_index > $2`
+
+  const queryMove = `
+  UPDATE category
+  SET category_index = $1
+  WHERE category_id = $2
+  returning *`
+
+  const client = await pool.connect()
+
+  try {
+    await client.query('BEGIN')
+    //BEGIN TRANSACTION
+    await client.query(queryLock, [username])
+    index = await client.query(queryIndex, [username])
+    console.log(newpos)
+    if (index.rows[0].max > newpos) {
+      const pos = await client.query(queryPos, [id])
+
+      if (pos.rows[0].category_index < newpos) {
+        console.log(`shiftDown`)
+        await client.query(queryShiftDown, [newpos, pos.rows[0].category_index])
+        var moved = await client.query(queryMove, [newpos, id])
+      } else {
+        console.log(`shiftUp`)
+        await client.query(queryShiftUp, [newpos, pos.rows[0].category_index])
+        var moved = await client.query(queryMove, [newpos, id])
+      }
+
+    } else {
+      throw "Index invalid"
+    }
+    //END TRANSACTION
+    await client.query(`COMMIT`)
+    console.log(moved)
+  } catch (e) {
+    await client.query(`ROLLBACK`)
+    throw e
+  } finally {
+    await client.release()
+  }
+}
+
+//move_category('jason', 530, 4)
+
+run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
 //run_query(`SELECT * from card`).then(res => console.log(res.rows))
 module.exports = {
   addUser,
