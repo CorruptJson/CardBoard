@@ -5,7 +5,7 @@
 /*------------------grid---------------------*/
 
 .header {
-    grid-area: header
+    grid-area: header;
 }
 
 #cat_container {
@@ -20,7 +20,6 @@
 }
 
 /*------------------Header-------------------*/
-
 header {
     position: relative;
     width: 100%;
@@ -232,4 +231,10 @@ p {
 
 button {
     user-select: none;
+}
+
+
+/*------------------flash mode------------------*/
+#stack_card{
+    display:none;
 }

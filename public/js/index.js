@@ -249,6 +249,51 @@ const edit_text_request = (id, text, side) => {
     })
 }
 
+var flash_cards = [];
+var stack = [];
+var index = 0;
+
+const flash_mode = (self) => {
+  document.getElementById("cat_container").style.display = "none";
+  document.getElementById("stack_card").style.display = "block";
+  let next_card = document.getElementById("next_card");
+  let card = self.parentNode.childNodes
+  
+  card.forEach(function (el) {
+    if (el.tagName == "LABEL") {  
+      flash_cards.push(el);
+      //stack = flash_cards.slice();
+    };
+  })  
+  for (var i = 0; i < flash_cards.length; i++) {
+    stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i]) 
+  }
+  stack_card.innerHTML = '';
+  stack_card.appendChild(stack[index]); 
+}
+
+const next_card = () => {
+  let stack_card = document.getElementById("stack_card")
+  if (index < (stack.length - 1)) {
+    index += 1;
+  } else {
+    index = 0;
+  }
+  stack_card.innerHTML = '';
+  stack_card.appendChild(stack[index]);
+}
+
+const reverse_button = () => {
+  let stack_card = document.getElementById("stack_card")
+  if (index > 0) {
+    index -= 1;
+  } else {
+    index = stack.length -1
+  }
+  stack_card.innerHTML = '';
+  stack_card.appendChild(stack[index]);
+}
+
 
 const cardCheckbox = (self) => {
   if (self.checked) {
