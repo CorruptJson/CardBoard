@@ -16,8 +16,12 @@ const flash_mode = (self) => {
   let array = createDisplayDivs(valueList)
 
   let randomArray = shuffle(array)
+  if (array.length > 0) {
+    showDisplay(randomArray)
+  } else {
+    window.alert("Add at least one card to view flash card mode")
+  }
 
-  showDisplay(randomArray)
   //console.log(randomArray)
 
 }
@@ -159,9 +163,9 @@ const createDisplayDivs = (valueList) => {
     newDiv.className = `card`
 
     newFront.className = "front"
-    newFront.innerHTML = `<h3>${el.front}</h3>`
+    newFront.innerHTML = `<h3>${escape_HTML(el.front)}</h3>`
     newBack.className = "back"
-    newBack.innerHTML = `<p>${el.back}</p>`
+    newBack.innerHTML = `<p>${escape_HTML(el.back)}</p>`
 
     newDiv.appendChild(newFront)
     newDiv.appendChild(newBack)
