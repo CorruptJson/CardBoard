@@ -63,7 +63,12 @@ header {
     border-radius: 6px;
     background-color: white;
     text-align: right;
+    position: fixed;
+    top: 57px;
+    right: 12px;
+    z-index: 1;
 }
+
 
 /*------------------Categories------------------*/
 
@@ -71,18 +76,19 @@ header {
     display: inline-block;
     width: 280px;
     max-height: calc(100vh - 130px);
-    background-color: rgb(230, 230, 230);
-    border: solid rgb(230, 230, 230) 3px;
+    background-color: rgba(255, 255, 255, 0.719);
     border-radius: 6px 6px 0px 0px;
     margin: 5px;
-    min-height: 200px;
     vertical-align: top;
     padding: 0px;
+    text-align:center;
 }
 
 #card_container {
     overflow: auto;
-    max-height: calc(100vh - 176px);
+    max-height: calc(100vh - 190px);
+    text-align:center;
+
 }
 
 #cat_container {
@@ -106,13 +112,20 @@ header {
     text-align: center;
     font-size: 20px;
     text-decoration: underline;
-    background-color: rgb(230, 230, 230);
+    background-color: rgba(252, 252, 252, 0.795);
     position: relative;
+    padding: 8px;
 }
 
 .delCatButton {
     right: 0px;
+    top: 0px;
+    background-color: rgba(158, 154, 154, 0.582);
     position: absolute;
+    padding:5px;
+    padding-left: 10px;
+    padding-right:10px;
+
 }
 
 /* --------------Cards--------------- */
@@ -186,6 +199,7 @@ label:hover .card {
     position: absolute;
 }
 
+
 .nohover {
     pointer-events: none
 }
@@ -208,6 +222,13 @@ label:hover .card {
     margin: auto;
     width: 80px;
 }
+
+.delButton {
+    position: absolute;
+    right: 30px;
+    bottom: 9px;
+}
+
 
 p {
     margin: 14px;
@@ -325,6 +346,13 @@ button {
 .flash_button {
     width: 100%;
     display: block;
+
+    padding: 5px;
+}
+
+.flash_button:hover {
+    /*  background-color: rgb(226, 249, 255);*/
+    cursor: pointer;
 }
 
 #header_tab {
@@ -362,3 +390,12 @@ input[type="radio" i] {
     padding:0px;
     display:inline-block
 }
+
+    
+span {
+    position: fixed;
+    right: 16px;
+    top: 32px;
+    text-align: right;
+}
+

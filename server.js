@@ -174,6 +174,17 @@ app.post('/deleteCategory', requireLogin, (request, response) => {
     })
 })
 
+app.post('/deleteCard', requireLogin, (request, response) => {
+  const username = request.session.user
+  const id = request.body.id
+  db.delete_card(username, id)
+    .then(res => response.send(true))
+    .catch(err => {
+      console.error(err)
+      response.send(false)
+    })
+})
+
 app.post('/editCategory', requireLogin, (request, response) => {
   const username = request.session.user
   const id = request.body.id

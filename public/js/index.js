@@ -71,6 +71,8 @@ const deleteCat = (self) => {
   }
 }
 
+
+
 const createCard = (self) => {
   const category_id = self.parentNode.parentNode.dataset.id
   const data = { id: category_id }
@@ -155,6 +157,7 @@ const edit_title = (self) => {
       titleHeader.innerHTML = escape_HTML(text)
       category.dataset.title = text
       parent.replaceChild(titleHeader, textField)
+
       fetch(`${url}/editCategory`, {
         method: 'post',
         headers: { "Content-Type": "application/json" },
@@ -171,7 +174,7 @@ const edit_title = (self) => {
   })
 
   parent.replaceChild(textField, self)
-
+  textField.focus()
 
 }
 
@@ -182,6 +185,8 @@ const edit_card = (self) => {
   const card = self.parentNode
   const area = document.createElement("textarea")
   const confirm = document.createElement("button")
+  const del = document.createElement("button")
+
   area.className = "frontTextArea"
   area.style.position = "relative"
   area.style.height = "160px"
@@ -189,6 +194,45 @@ const edit_card = (self) => {
   area.style.resize = "none"
   confirm.className = "confirm-card"
   confirm.innerHTML = "✔"
+  del.className = "delButton"
+  del.innerHTML = "x"
+
+
+  //deleteCard
+  del.addEventListener("click", () => {
+    if (window.confirm(`Delete Card?`)) {
+      const id = del.parentNode.parentNode.dataset.id
+      //const categories = document.getElementsByClassName("categories")
+      const data = { id: id }
+      console.log(data)
+      fetch(`${url}/deleteCard`, {
+        method: 'post',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+        .then(res => {
+          if (res.redirected) {
+            alert("Your session has expired. Please log back in.")
+            window.location.href = "/"
+          }
+          return res.json()
+        })
+        .then(res => {
+          if (res) {
+            //const index = parseInt(del.parentNode.parentNode.dataset.index)
+            //for (let i = 0; i < cards.length; i++) {
+             // if (parseInt(cards[i].dataset.index) > index) {
+             //   cards[i].dataset.index -= 1
+              //}
+           //}
+            del.parentNode.parentNode.parentNode.remove()
+          } else {
+            console.error('Error deleting card')
+          }
+        })
+    }
+  })
+
 
   if (card.className == "front") {
     let text = card.parentNode.dataset.front
@@ -217,8 +261,9 @@ const edit_card = (self) => {
     })
   }
   card.innerHTML = ''
-
+  card.appendChild(del)
   card.appendChild(area)
+  area.focus()
   card.appendChild(confirm)
 }
 

@@ -280,7 +280,27 @@ const move_category = async (username, id, newpos) => {
   }
 }
 
-//move_category('jason', 530, 4)
+const delete_card = async (username, id) => {
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+    await client.query("SELECT * from card WHERE category_id in (SELECT category_id from category WHERE username = $1) FOR UPDATE", [username])
+    const deleted = await client.query("DELETE from card WHERE card_id = $1 and category_id in (SELECT category_id from category WHERE username = $2) RETURNING *", [id, username])
+    if (deleted.rows[0]) {
+      await client.query(`UPDATE card SET card_index = card_index - 1 WHERE card_index > $1`, [deleted.rows[0].card_index])
+    } else {
+      throw `Error: Failed to delete card. No category with matching ID and username!`
+    }
+    await client.query('COMMIT')
+  } catch (e) {
+    await client.query('ROLLBACK')
+    throw e
+  } finally {
+    await client.release()
+  }
+  return
+
+}
 
 run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
 //run_query(`SELECT * from card`).then(res => console.log(res.rows))
@@ -295,6 +315,7 @@ module.exports = {
   delete_category,
   create_card,
   edit_card,
-  edit_category
+  edit_category,
+  delete_card
 }
 
