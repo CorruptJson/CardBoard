@@ -29,9 +29,16 @@
             </div>{{/each}}<input id="createCat" type="button" value="+" onclick="addCat()" />
 
         </div>
-        <div id="stack_card"></div>
-        <input id="next_card" type="button" value=">" onclick="next_card()">
-        <input id="reverse_card" type="button" value="<" onclick="reverse_button()">
+
+        <div id="stack_back" onclick="take_a_life()"></div>
+        <div id="stack_container">
+            <div id="stack_window">
+                <div id="stack_card"></div>
+                <input id="reverse_card" type="button" value="<" onclick="reverse_button()">
+                <input id="next_card" type="button" value=">" onclick="next_card()">
+                <input id="back_card" type="button" value="back" onclick="take_a_life()">
+            </div>
+        </div>
     </div>
 
 </body>

@@ -254,30 +254,79 @@ var stack = [];
 var index = 0;
 
 const flash_mode = (self) => {
-  document.getElementById("cat_container").style.display = "none";
-  document.getElementById("stack_card").style.display = "block";
   let next_card = document.getElementById("next_card");
   let card = self.parentNode.childNodes
-  
+  var i = 0
   card.forEach(function (el) {
-    if (el.tagName == "LABEL") {  
-      flash_cards.push(el);
+    if (el.tagName == "LABEL") {
+      let newLabel = document.createElement("label")
+      let newDiv = document.createElement("div")
+      let newCheckbox = document.createElement("input")
+      let newFront = document.createElement("div")
+      let newBack = document.createElement("div")
+
+      newLabel.className = "flip"
+
+      newCheckbox.type = "checkbox"
+      newCheckbox.className = "invisCheck"
+
+      newCheckbox.addEventListener("change", (e) => {
+        if (newCheckbox.checked) {
+          newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "none"
+        } else {
+           newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "initial"
+        }
+      })
+
+      newDiv.className = `card`
+      newDiv.id = i
+      newDiv.front = el.childNodes[3].childNodes[1].childNodes[0].innerHTML
+      newDiv.back = el.childNodes[3].childNodes[3].childNodes[0].innerHTML
+      newDiv.index = el.index
+
+      newFront.className = "front"
+      newFront.innerHTML = `<h3>${newDiv.front}</h3>`
+      newBack.className = "back"
+      newBack.innerHTML = `<p>${newDiv.back}</p>`
+
+      newLabel.appendChild(newCheckbox)
+      newLabel.appendChild(newDiv)
+
+      newDiv.appendChild(newFront)
+      newDiv.appendChild(newBack)
+      // self.parentNode.insertBefore(newLabel, self.parentNode.childNodes[self.parentNode.childNodes.length - 2])
+      newLabel.id = "unik"
+      newLabel = 100%
+      flash_cards.push(newLabel);
+      i ++
       //stack = flash_cards.slice();
     };
   })  
-  for (var i = 0; i < flash_cards.length; i++) {
-    stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i]) 
+  if (flash_cards != 0) {
+    document.getElementById("stack_back").style.display = "block";
+    document.getElementById("stack_container").style.display = "block";
+
+    for (i = 0; i < flash_cards.length; i++) {
+      stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i]) 
+    }
+    stack_card.innerHTML = '';
+    stack_card.appendChild(stack[index]);
+    if (index == stack.length - 1) {
+      document.getElementById("back_card").style.display = "inline-block";
+      document.getElementById("next_card").style.display = "none";
+    }
   }
-  stack_card.innerHTML = '';
-  stack_card.appendChild(stack[index]); 
 }
 
 const next_card = () => {
   let stack_card = document.getElementById("stack_card")
   if (index < (stack.length - 1)) {
+    document.getElementById("reverse_card").style.display = "inline-block";
     index += 1;
-  } else {
-    index = 0;
+  }
+  if (index == stack.length - 1) {
+    document.getElementById("back_card").style.display = "inline-block";
+    document.getElementById("next_card").style.display = "none";
   }
   stack_card.innerHTML = '';
   stack_card.appendChild(stack[index]);
@@ -287,13 +336,26 @@ const reverse_button = () => {
   let stack_card = document.getElementById("stack_card")
   if (index > 0) {
     index -= 1;
-  } else {
-    index = stack.length -1
+    document.getElementById("back_card").style.display = "none";
+    document.getElementById("next_card").style.display = "inline-block";
+  }
+  if (index == 0) {
+    document.getElementById("reverse_card").style.display = "none";
   }
   stack_card.innerHTML = '';
   stack_card.appendChild(stack[index]);
 }
 
+const take_a_life = () => {
+  flash_cards = [];
+  stack = [];
+  index = 0;
+  document.getElementById("back_card").style.display = "none";
+  document.getElementById("reverse_card").style.display = "none";
+  document.getElementById("stack_container").style.display = "none";
+  document.getElementById("stack_back").style.display = "none";
+  document.getElementById("next_card").style.display = "inline-block";
+}
 
 const cardCheckbox = (self) => {
   if (self.checked) {
