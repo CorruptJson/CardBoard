@@ -8,7 +8,7 @@ if (window.location.hostname == 'cardboard-project.herokuapp.com') {
   var url = `http://${window.location.hostname}:${location.port}`
 }
 
-console.log(url)
+//console.log(url)
 //Edit button <button class="card-edit" onclick="edit_card(this)">Edit</button>
 
 const addCat = () => {
@@ -87,7 +87,7 @@ const createCard = (self) => {
       return res.json()
     })
     .then(res => {
-      console.log(res)
+      //console.log(res)
       if (res) {
         let newLabel = document.createElement("label")
         let newDiv = document.createElement("div")
@@ -101,7 +101,7 @@ const createCard = (self) => {
         newCheckbox.className = "invisCheck"
 
         newCheckbox.addEventListener("change", (e) => {
-          console.log(newCheckbox.parentNode.childNodes[1].childNodes[0])
+          //console.log(newCheckbox.parentNode.childNodes[1].childNodes[0])
           if (newCheckbox.checked) {
             newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "none"
           } else {
@@ -301,13 +301,13 @@ const flash_mode = (self) => {
       i ++
       //stack = flash_cards.slice();
     };
-  })  
+  })
   if (flash_cards != 0) {
     document.getElementById("stack_back").style.display = "block";
     document.getElementById("stack_container").style.display = "block";
 
     for (i = 0; i < flash_cards.length; i++) {
-      stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i]) 
+      stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i])
     }
     stack_card.innerHTML = '';
     stack_card.appendChild(stack[index]);
@@ -360,7 +360,7 @@ const take_a_life = () => {
 const cardCheckbox = (self) => {
   if (self.checked) {
 
-    console.log(self.parentNode.childNodes)
+    //console.log(self.parentNode.childNodes)
     self.parentNode.childNodes[3].childNodes[1].style.pointerEvents = "none"
   } else {
     self.parentNode.childNodes[3].childNodes[1].style.pointerEvents = "initial"

@@ -207,14 +207,14 @@ const edit_card = async (username, id, text, side) => {
     throw "Error: Invalid side"
   }
   if (card.rows[0]) {
-    console.log(card.rows[0])
+    //console.log(card.rows[0])
     return card.rows[0]
   } else {
     throw "Error: Failed to edit card. Card does not exist or card does not belong to user"
   }
 }
 
-run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
+//run_query(`SELECT * from category WHERE username = 'jason' ORDER BY category_index`).then(res => console.log(res.rows))
 //run_query(`SELECT * from card`).then(res => console.log(res.rows))
 module.exports = {
   addUser,
