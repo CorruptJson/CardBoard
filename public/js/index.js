@@ -294,6 +294,7 @@ const reverse_button = () => {
   stack_card.appendChild(stack[index]);
 }
 
+
 const cardCheckbox = (self) => {
   if (self.checked) {
 
