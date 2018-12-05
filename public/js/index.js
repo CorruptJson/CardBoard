@@ -264,6 +264,7 @@ const flash_mode = (self) => {
       let newCheckbox = document.createElement("input")
       let newFront = document.createElement("div")
       let newBack = document.createElement("div")
+      var dot = '<input type="radio" name="dot" value =' + i + ' id="radio' + i + '" onclick="spec_card()">'
 
       newLabel.className = "flip"
 
@@ -296,7 +297,9 @@ const flash_mode = (self) => {
       newDiv.appendChild(newBack)
       // self.parentNode.insertBefore(newLabel, self.parentNode.childNodes[self.parentNode.childNodes.length - 2])
       newLabel.id = "unik"
-      newLabel = 100%
+
+      document.getElementById("dots").innerHTML += dot;
+
       flash_cards.push(newLabel);
       i ++
       //stack = flash_cards.slice();
@@ -305,12 +308,15 @@ const flash_mode = (self) => {
   if (flash_cards != 0) {
     document.getElementById("stack_back").style.display = "block";
     document.getElementById("stack_container").style.display = "block";
-
+    
     for (i = 0; i < flash_cards.length; i++) {
       stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i]) 
     }
+
+    document.getElementById("radio0").checked = true;
     stack_card.innerHTML = '';
     stack_card.appendChild(stack[index]);
+
     if (index == stack.length - 1) {
       document.getElementById("back_card").style.display = "inline-block";
       document.getElementById("next_card").style.display = "none";
@@ -319,7 +325,7 @@ const flash_mode = (self) => {
 }
 
 const next_card = () => {
-  let stack_card = document.getElementById("stack_card")
+  let stack_card = document.getElementById("stack_card");
   if (index < (stack.length - 1)) {
     document.getElementById("reverse_card").style.display = "inline-block";
     index += 1;
@@ -328,12 +334,13 @@ const next_card = () => {
     document.getElementById("back_card").style.display = "inline-block";
     document.getElementById("next_card").style.display = "none";
   }
+  document.getElementById("radio" + index).checked = true;
   stack_card.innerHTML = '';
   stack_card.appendChild(stack[index]);
 }
 
 const reverse_button = () => {
-  let stack_card = document.getElementById("stack_card")
+  let stack_card = document.getElementById("stack_card");
   if (index > 0) {
     index -= 1;
     document.getElementById("back_card").style.display = "none";
@@ -341,6 +348,32 @@ const reverse_button = () => {
   }
   if (index == 0) {
     document.getElementById("reverse_card").style.display = "none";
+  }
+  document.getElementById("radio" + index).checked = true;
+  stack_card.innerHTML = '';
+  stack_card.appendChild(stack[index]);
+}
+
+const spec_card = () => {
+  let stack_card = document.getElementById("stack_card");
+  let radiobtn = document.getElementById("radio" + index);
+  for (i = 0; i < stack.length; i++) {
+       if (document.getElementById("radio" + i).checked == true) {
+        index = i;
+       }
+    }
+  if (index == 0) {
+    document.getElementById("reverse_card").style.display = "none";
+    document.getElementById("back_card").style.display = "none";
+    document.getElementById("next_card").style.display = "inline-block";
+  } else if (index == stack.length - 1) {
+    document.getElementById("reverse_card").style.display = "inline-block";
+    document.getElementById("back_card").style.display = "inline-block";
+    document.getElementById("next_card").style.display = "none";
+  } else {
+    document.getElementById("reverse_card").style.display = "inline-block";
+    document.getElementById("back_card").style.display = "none";
+    document.getElementById("next_card").style.display = "inline-block";
   }
   stack_card.innerHTML = '';
   stack_card.appendChild(stack[index]);
@@ -355,6 +388,9 @@ const take_a_life = () => {
   document.getElementById("stack_container").style.display = "none";
   document.getElementById("stack_back").style.display = "none";
   document.getElementById("next_card").style.display = "inline-block";
+  while (document.getElementById("dots").firstChild) {
+    document.getElementById("dots").removeChild(document.getElementById("dots").firstChild);
+  }
 }
 
 const cardCheckbox = (self) => {
