@@ -267,6 +267,10 @@ button {
     float: right;
 }
 
+#dots{
+    float: right;
+}
+
 #back_card{
     display: none;
     float: right;
