@@ -233,8 +233,45 @@ button {
     user-select: none;
 }
 
-
 /*------------------flash mode------------------*/
-#stack_card{
-    display:none;
+
+#stack_back{
+    display: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+#stack_container{
+    display: none;
+}
+
+#stack_window{
+    z-index: 11;
+    margin: auto;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    width: 70%;
+    height: 70%;
+}
+
+#reverse_card{
+    display: none;
+}
+
+#next_card{
+    float: right;
+}
+
+#back_card{
+    display: none;
+    float: right;
+}
+
+#unik {
+    height: 500px;
 }
