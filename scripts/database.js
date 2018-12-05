@@ -165,7 +165,7 @@ const delete_category = async (username, id) => {
     await client.query("SELECT * from category WHERE username = $1 FOR UPDATE", [username])
     const deleted = await client.query("DELETE from category WHERE username = $1 and category_id = $2 RETURNING category_index", [username, id])
     if (deleted.rows[0]) {
-      await client.query(`UPDATE category SET category_index = category_index - 1 WHERE category_index > $1`, [deleted.rows[0].category_index])
+      await client.query(`UPDATE category SET category_index = category_index - 1 WHERE category_index > $1 and username = $2`, [deleted.rows[0].category_index, username])
     } else {
       throw `Error: Failed to delete category. No category with matching ID and username!`
     }
