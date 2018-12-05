@@ -29,7 +29,7 @@ const addCat = () => {
         newDiv.dataset.id = res.id
         newDiv.dataset.title = `New Category`
         newDiv.dataset.index = res.index
-        newDiv.innerHTML = `<div class="cat_title">${newDiv.dataset.title}<button class="delCatButton" onclick="deleteCat(this)">x</button></div><button id="createCard" onclick="createCard(this)">+</button> `
+        newDiv.innerHTML = `<div class="cat_title"><u onclick="edit_title(this)">${newDiv.dataset.title}</u><button class="delCatButton" onclick="deleteCat(this)">x</button></div><button id="createCard" onclick="createCard(this)">+</button> `
 
         document.getElementById("cat_container").insertBefore(newDiv, document.getElementById("createCat"))
       } else {
@@ -100,6 +100,15 @@ const createCard = (self) => {
         newCheckbox.type = "checkbox"
         newCheckbox.className = "invisCheck"
 
+        newCheckbox.addEventListener("change", (e) => {
+          console.log(newCheckbox.parentNode.childNodes[1].childNodes[0])
+          if (newCheckbox.checked) {
+            newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "none"
+          } else {
+            newCheckbox.parentNode.childNodes[1].childNodes[0].style.pointerEvents = "initial"
+          }
+        })
+
         newDiv.className = `card`
         newDiv.dataset.id = res.id
         newDiv.dataset.front = res.front
@@ -114,6 +123,7 @@ const createCard = (self) => {
         newLabel.appendChild(newCheckbox)
         newLabel.appendChild(newDiv)
 
+
         newDiv.appendChild(newFront)
         newDiv.appendChild(newBack)
         self.parentNode.insertBefore(newLabel, self.parentNode.childNodes[self.parentNode.childNodes.length - 2])
@@ -124,12 +134,55 @@ const createCard = (self) => {
     })
 }
 
+const edit_title = (self) => {
+  const category = self.parentNode.parentNode
+  const parent = self.parentNode
+  const textField = document.createElement("input")
+  textField.type = "text"
+  textField.maxLength = 32
+  textField.value = category.dataset.title
+
+  textField.addEventListener("keypress", (e) => {
+    if (e.keyCode === 13) {
+
+      const text = textField.value
+      const id = category.dataset.id
+      const titleHeader = self
+      const data = {
+        id: id,
+        text: text,
+      }
+      titleHeader.innerHTML = escape_HTML(text)
+      category.dataset.title = text
+      parent.replaceChild(titleHeader, textField)
+      fetch(`${url}/editCategory`, {
+        method: 'post',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+        .then(res => {
+          if (res.redirected) {
+            alert("Your session has expired. Please log back in.")
+            window.location.href = "/"
+          }
+          return res.json()
+        })
+    }
+  })
+
+  parent.replaceChild(textField, self)
+
+
+}
+
+
 const edit_card = (self) => {
   event.stopPropagation()
   event.preventDefault()
-  let card = self.parentNode
-  let area = document.createElement("textarea")
-  let confirm = document.createElement("button")
+  const card = self.parentNode
+  const area = document.createElement("textarea")
+  const confirm = document.createElement("button")
+  area.className = "frontTextArea"
   area.style.position = "relative"
   area.style.height = "160px"
   area.style.width = "230px"
@@ -172,7 +225,7 @@ const edit_card = (self) => {
 
 
 const escape_HTML = (str) => {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 
@@ -196,42 +249,57 @@ const edit_text_request = (id, text, side) => {
     })
 }
 
-//function getChildren(n, skipMe) {
-//  var r = [];
-//  for (; n; n = n.nextSibling)
-//    if (n.nodeType == 1 && n != skipMe)
-//      r.push(n);
-//  return r;
-//};
-
-//function getSiblings(n) {
-//  return getChildren(n.parentNode.firstChild, n);
-//}
+var flash_cards = [];
+var stack = [];
+var index = 0;
 
 const flash_mode = (self) => {
   document.getElementById("cat_container").style.display = "none";
   document.getElementById("stack_card").style.display = "block";
-
+  let next_card = document.getElementById("next_card");
   let card = self.parentNode.childNodes
-    
-  flash_cards = []
+  
   card.forEach(function (el) {
-    if (el.tagName == "LABEL") {
-      flash_cards.push(el);     
+    if (el.tagName == "LABEL") {  
+      flash_cards.push(el);
+      //stack = flash_cards.slice();
     };
-  })
-
-  document.getElementById("stack_card").appendChild(flash_cards[(Math.floor(Math.random() * flash_cards.length))]) 
+  })  
+  for (var i = 0; i < flash_cards.length; i++) {
+    stack.splice(Math.floor(Math.random() * stack.length), 0, flash_cards[i]) 
+  }
+  stack_card.innerHTML = '';
+  stack_card.appendChild(stack[index]); 
 }
 
-
-
-/*
-for (let i = 0; i < document.getElementsByClassName("card-edit").length; i++) {
-  console.log(document.getElementsByClassName("card-edit")[i])
-  document.getElementsByClassName("card-edit")[i].addEventListener("click", (event) => {
-    event.stopPropagation()
-    event.preventDefault()
-  })
+const next_card = () => {
+  let stack_card = document.getElementById("stack_card")
+  if (index < (stack.length - 1)) {
+    index += 1;
+  } else {
+    index = 0;
+  }
+  stack_card.innerHTML = '';
+  stack_card.appendChild(stack[index]);
 }
-*/
+
+const reverse_button = () => {
+  let stack_card = document.getElementById("stack_card")
+  if (index > 0) {
+    index -= 1;
+  } else {
+    index = stack.length -1
+  }
+  stack_card.innerHTML = '';
+  stack_card.appendChild(stack[index]);
+}
+
+const cardCheckbox = (self) => {
+  if (self.checked) {
+
+    console.log(self.parentNode.childNodes)
+    self.parentNode.childNodes[3].childNodes[1].style.pointerEvents = "none"
+  } else {
+    self.parentNode.childNodes[3].childNodes[1].style.pointerEvents = "initial"
+  }
+}

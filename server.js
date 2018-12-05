@@ -58,6 +58,9 @@ const createBoardDivs = async (username) => {
 }
 
 
+
+
+
 /**** Middlewares ***/
 app.set('view engine', 'hbs')
 
@@ -171,6 +174,15 @@ app.post('/deleteCategory', requireLogin, (request, response) => {
     })
 })
 
+app.post('/editCategory', requireLogin, (request, response) => {
+  const username = request.session.user
+  const id = request.body.id
+  const text = request.body.text
+  db.edit_category(username, id, text)
+    .then(res => { response.send(true) })
+    .catch(res => { response.send(false) })
+})
+
 app.post('/createCard', requireLogin, (request, response) => {
   const username = request.session.user
   const id = request.body.id // id of category
@@ -196,7 +208,9 @@ app.post('/editCard', requireLogin, (request, response) => {
   const side = request.body.side
   db.edit_card(username, id, text, side)
     .then(res => { response.send(true) })
+    .catch(res => { response.send(false) })
 })
+
 
 /**** Start Server ***/
 app.listen(port, console.log(`Server is up on the port ${port}, with PID: ${process.pid}`))

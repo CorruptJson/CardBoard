@@ -11,14 +11,15 @@
     <div class="grid-container">
         {{>header}}
         <div id="cat_container">
+
             {{#each categories}}<div class="categories" data-id={{this.category_id}} data-title="{{this.category_title}}" data-index="{{this.category_index}}">
                 <input class="flash_button" type="button" value="Flash card mode" onclick="flash_mode(this)">
-                <div class="cat_title">{{this.category_title}}<button class="delCatButton" onclick="deleteCat(this)">x</button></div>
+                <div class="cat_title"><u onclick="edit_title(this)">{{this.category_title}}</u><button class="delCatButton" onclick="deleteCat(this)">x</button></div>
                 {{#each this.card_list}}
                 <label class="flip">
-                    <input type="checkbox" class="invisCheck"/>
+                    <input type="checkbox" class="invisCheck" onchange="cardCheckbox(this)" />
                     <div class="card" data-id={{this.card_id}} data-front="{{this.card_front}}" data-back="{{this.card_back}}"
-                        data-index={{this.card_index}}>
+                         data-index={{this.card_index}}>
                         <div class="front"><h3>{{this.card_front}}</h3><button class="card-edit" onclick="edit_card(this)">Edit</button></div>
                         <div class="back"><p>{{this.card_back}}</p><button class="card-edit" onclick="edit_card(this)">Edit</button></div>
                     </div>
@@ -27,10 +28,9 @@
             </div>{{/each}}<input id="createCat" type="button" value="+" onclick="addCat()" />
 
         </div>
-        <div id="stack_card">
-
-        </div>
-
+        <div id="stack_card"></div>
+        <input id="next_card" type="button" value=">" onclick="next_card()">
+        <input id="reverse_card" type="button" value="<" onclick="reverse_button()">
     </div>
 
 </body>
