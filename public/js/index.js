@@ -2,7 +2,7 @@
 window.history.pushState("", "", '/')
 
 //if url is heroku, us https
-if (window.location.hostname == 'cardboard-project.herokuapp.com') {
+if (window.location.hostname != 'localhost') {
   var url = `https://${window.location.hostname}:${location.port}`
 } else {
   var url = `http://${window.location.hostname}:${location.port}`
