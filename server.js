@@ -15,7 +15,7 @@ const port = process.env.PORT || 8080
 const sessionSecret = process.env.SESSION_SECRET
 // Duration values are in milliseconds.
 // 30 * 60 * 1000 = 30 Minutes
-const sessionDuration = 30 * 60 * 1000
+const sessionDuration =  24 * 60 * 60 * 1000
 const sessionActiveDuration = 5 * 60 * 1000
 const app = express()
 
