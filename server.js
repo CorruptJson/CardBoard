@@ -72,7 +72,6 @@ app.use(session({
   secret: sessionSecret,
   duration: sessionDuration,
   activeDuration: sessionActiveDuration,
-  httpOnly: true,
   secure: true,
 }))
 
